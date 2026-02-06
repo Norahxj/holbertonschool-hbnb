@@ -1,48 +1,64 @@
-# Part 1: Technical Documentation
+# HBnB Evolution
 
-## 0. High-Level Package Diagram
+HBnB Evolution is a simplified AirBnB-like platform developed as a software engineering project. The system allows users to register, list properties, manage amenities, and leave reviews, following modern software architecture principles.
 
-### Objective
-The objective of this task is to create a high-level package diagram that illustrates the three-layer architecture of the HBnB application and the communication between these layers using the Facade design pattern. This diagram provides a conceptual overview of how the application is structured and how its main components interact.
-
----
-
-### Description
-The HBnB application follows a layered architecture composed of three main layers:
-
-- **Presentation Layer (Services, API):**  
-  This layer manages all interactions between users and the application. It exposes APIs and services that handle incoming requests and outgoing responses.
-
-- **Business Logic Layer (Models):**  
-  This layer contains the core business logic of the application. It includes the main models representing the system’s entities, such as User, Place, Review, and Amenity.
-
-- **Persistence Layer:**  
-  This layer is responsible for data storage and retrieval. It interacts directly with the database through repositories or data access components.
-
-Communication between layers is structured and controlled using the **Facade Pattern**, which provides a unified interface between the Presentation Layer and the Business Logic Layer. This approach simplifies interactions and enforces separation of concerns.
+This project is divided into multiple parts, each focusing on a different stage of system development.
 
 ---
 
-### High-Level Package Diagram
+## 🚀 Project Structure
 
-The following UML package diagram represents the three-layer architecture of the HBnB application and the communication pathways between them:
+| Part | Focus |
+|------|------|
+| **Part 1** | System architecture & technical documentation |
+| Part 2 | *(To be added later)* |
+| Part 3 | *(To be added later)* |
+| Part 4 | *(To be added later)* |
 
-classDiagram
-class PresentationLayer {
-    API
-    Services
-}
+---
 
-class BusinessLogicLayer {
-    User
-    Place
-    Review
-    Amenity
-}
+## 📘 Part 1 – Technical Documentation
 
-class PersistenceLayer {
-    Repositories
-}
+Part 1 focuses on designing the system before implementation. It defines the structure, components, and interactions of the HBnB application.
 
-PresentationLayer --> BusinessLogicLayer : Facade Pattern
-BusinessLogicLayer --> PersistenceLayer : Database Operations
+### 🔹 What is covered in Part 1
+
+- High-Level System Architecture  
+- Business Logic Domain Model  
+- API Interaction Flows  
+
+### 🔹 Architecture Style
+
+HBnB uses a **three-layer architecture**:
+
+1. **Presentation Layer** – APIs and services  
+2. **Business Logic Layer** – Core models and rules  
+3. **Persistence Layer** – Database interaction  
+
+Communication between the Presentation and Business Logic layers is handled using the **Facade Pattern**, ensuring modularity and scalability.
+
+---
+
+### 📊 Diagrams Included in Part 1
+
+- High-Level Package Diagram  
+- Detailed Class Diagram  
+- Sequence Diagrams for API Calls  
+
+These diagrams provide a complete technical blueprint that will guide future implementation phases.
+
+---
+
+## 🎯 Project Goal
+
+The objective of HBnB Evolution is to apply software engineering best practices such as:
+
+- Layered architecture  
+- UML modeling  
+- Clean separation of concerns  
+- Maintainable and scalable design  
+
+---
+
+More details about implementation and additional project parts will be added in future updates.
+
