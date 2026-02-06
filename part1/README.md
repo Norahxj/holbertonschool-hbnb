@@ -273,7 +273,7 @@ Success returns HTTP 201
 
 ---
 
-![Sequence Diagram (Review Submission)](Sequence_Diagram_(Review_Submission).png)
+![Sequence Diagram (Review Submission)](https://raw.githubusercontent.com/Norahxj/holbertonschool-hbnb/refs/heads/main/part1/Sequence%20Diagram%20(Review%20Submission).png)
 
 ---
 
@@ -284,7 +284,7 @@ Shows how reviews are submitted and validated.
 
 ---
 
-![Sequence Diagram (Fetching a List of Places)](Sequence_Diagram_(Fetching_a_List_of_Places).png)
+![Sequence Diagram (Fetching a List of Places)](https://raw.githubusercontent.com/Norahxj/holbertonschool-hbnb/refs/heads/main/part1/Sequence%20Diagram%20(User%20Registration).png)
 
 ---
 
