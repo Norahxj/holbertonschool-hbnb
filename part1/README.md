@@ -252,7 +252,7 @@ Success or error response is returned
 
 ---
 
-![Sequence Diagram (Place Creation)](Sequence_Diagram_(Place_Creation).png)
+![Sequence Diagram (Place Creation)](https://raw.githubusercontent.com/Norahxj/holbertonschool-hbnb/refs/heads/main/part1/Sequence%20Diagram%20(Place%20Creation).png)
 
 ---
 
