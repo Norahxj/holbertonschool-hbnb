@@ -134,7 +134,7 @@ This section describes the domain model, which represents the core concepts and 
 
 ---
 
-![Class Diagram](Class_Diagram.png)
+![Class Diagram](part1/Class Diagram.png)
 
 ---
 
