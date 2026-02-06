@@ -96,7 +96,7 @@ This layer contains no business logic — only data access operations.
 
 
 
-![Package Diagram ](part1/Package Diagram .png)
+![Package Diagram ](Package Diagram .png)
 
 
 Diagram Purpose:
@@ -132,7 +132,7 @@ This section describes the domain model, which represents the core concepts and 
 🖼️ 3.1 Class Diagram
 
 
-![Class Diagram](part1/Class Diagram.png)
+![Class Diagram](Class Diagram.png)
 
 
 Diagram Purpose:
@@ -220,7 +220,7 @@ Sequence diagrams illustrate runtime behavior and clearly show how requests flow
 
 5.1 User Registration
 
-![Sequence Diagram (User Registration)](part1/Sequence Diagram (User Registration).png)
+![Sequence Diagram (User Registration)](Sequence Diagram (User Registration).png)
 
 
 Purpose:
@@ -244,7 +244,7 @@ Success or error response is returned
 
 5.2 Place Creation
 
-![Sequence Diagram (Place Creation)](part1/Sequence Diagram (Place Creation).png)
+![Sequence Diagram (Place Creation)](Sequence Diagram (Place Creation).png)
 
 
 Purpose:
@@ -262,7 +262,7 @@ Success returns HTTP 201
 
 5.3 Review Submission
 
-![Sequence Diagram (Review Submission)](part1/Sequence Diagram (Review Submission).png)
+![Sequence Diagram (Review Submission)](Sequence Diagram (Review Submission).png)
 
 
 Purpose:
@@ -270,7 +270,7 @@ Shows how reviews are submitted and validated.
 
 5.4 Fetching a List of Places
 
-![Sequence Diagram (Fetching a List of Places)](part1/Sequence Diagram (Fetching a List of Places).png)
+![Sequence Diagram (Fetching a List of Places)](Sequence Diagram (Fetching a List of Places).png)
 
 
 Purpose:
