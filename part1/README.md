@@ -96,7 +96,7 @@ This layer contains no business logic — only data access operations.
 
 ---
 
-![Package Diagram ](Package Diagram .png)
+![Package Diagram ](Package_Diagram .png)
 
 ---
 
@@ -134,7 +134,7 @@ This section describes the domain model, which represents the core concepts and 
 
 ---
 
-![Class Diagram](Class Diagram.png)
+![Class Diagram](Class_Diagram.png)
 
 ---
 
@@ -225,7 +225,7 @@ Sequence diagrams illustrate runtime behavior and clearly show how requests flow
 
 ---
 
-![Sequence Diagram (User Registration)](Sequence Diagram (User Registration).png)
+![Sequence Diagram (User Registration)](Sequence_Diagram_User_Registration).png)
 
 ---
 
@@ -252,7 +252,7 @@ Success or error response is returned
 
 ---
 
-![Sequence Diagram (Place Creation)](Sequence Diagram (Place Creation).png)
+![Sequence Diagram (Place Creation)](Sequence_Diagram_(Place_Creation).png)
 
 ---
 
@@ -273,7 +273,7 @@ Success returns HTTP 201
 
 ---
 
-![Sequence Diagram (Review Submission)](Sequence Diagram (Review Submission).png)
+![Sequence Diagram (Review Submission)](Sequence_Diagram_(Review_Submission).png)
 
 ---
 
@@ -284,7 +284,7 @@ Shows how reviews are submitted and validated.
 
 ---
 
-![Sequence Diagram (Fetching a List of Places)](Sequence Diagram (Fetching a List of Places).png)
+![Sequence Diagram (Fetching a List of Places)](Sequence_Diagram_(Fetching_a_List_of_Places).png)
 
 ---
 
