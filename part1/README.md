@@ -134,7 +134,7 @@ This section describes the domain model, which represents the core concepts and 
 
 ---
 
-![Class Diagram](part1/Class Diagram.png)
+![Class Diagram](https://raw.githubusercontent.com/Norahxj/holbertonschool-hbnb/refs/heads/main/part1/Class%20Diagram.png)
 
 ---
 
