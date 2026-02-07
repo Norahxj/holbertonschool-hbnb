@@ -5,25 +5,15 @@ Parts **2, 3, and 4** will be added later as the implementation progresses.
 
 ---
 
-## 📘 Task Sections Inside the Documentation
+## 📘 Task Sections
 
-### 🔹 1. Maryam — High‑Level Package Diagram
-[Go to Maryam’s section](HBnB_full_documentation.md#2-high-level-architecture)
+### 🔹 [Maryam — High‑Level Package Diagram](#maryam-high-level-package-diagram)
 
----
+### 🔹 [Manar — Detailed Class Diagram](#manar-detailed-class-diagram)
 
-### 🔹 2. Manar — Detailed Class Diagram
-[Go to Manar’s section](HBnB_full_documentation.md#-hbnb-evolution--business-logic-layer)
+### 🔹 [Noura — Sequence Diagrams](#noura-sequence-diagrams)
 
----
-
-### 🔹 3. Noura — Sequence Diagrams
-[Go to Noura’s section](HBnB_full_documentation.md#-sequence-diagrams-for-api-calls)
-
----
-
-### 🔹 4. Full Documentation
-[Open full documentation](HBnB_full_documentation.md)
+### 🔹 [Full Documentation](#full-documentation)
 
 ---
 
@@ -47,3 +37,23 @@ The following parts will be added soon:
 
 ## 📜 Note
 This project is part of the Holberton School curriculum.
+
+---
+
+# Maryam — High‑Level Package Diagram
+(put Maryam’s section here)
+
+---
+
+# Manar — Detailed Class Diagram
+(put Manar’s section here)
+
+---
+
+# Noura — Sequence Diagrams
+(put Noura’s section here)
+
+---
+
+# Full Documentation
+(put full documentation here)
