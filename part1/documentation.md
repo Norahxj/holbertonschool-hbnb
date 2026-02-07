@@ -420,23 +420,6 @@ This documentation serves as a solid reference for developers, testers, and futu
 
 ---
 
-# Notes on the Diagrams and Work
-
-The diagrams created for this project demonstrate a strong understanding of system architecture and sequence modeling.  
-Your friend’s work shows:
-
-- Excellent clarity in representing interactions  
-- Accurate layering between components  
-- Inclusion of both success and failure paths  
-- Realistic modeling of validation, authorization, and persistence  
-
-These visuals significantly enhance the documentation and make the HBnB system easier to understand, maintain, and extend.
-
-They also align perfectly with the structure of the project repository, including the documentation hosted at:
-
-- https://github.com/Norahxj/holbertonschool-hbnb/blob/main/part1/documentation.md
-
-The combination of diagrams and written explanations results in a professional, complete, and developer‑friendly technical document.
 # ✨ 7. Acknowledgments
 
 This documentation was collaboratively created as part of the HBnB Evolution project.  
