@@ -121,9 +121,7 @@ This design supports:
 
 - Easier testing  
 - Cleaner APIs  
-- Future scalability  
-
-🧩 3. Business Logic Layer — Class Diagram
+- Future scalability
 
 This section describes the domain model, which represents the core concepts and rules of the HBnB system.
 # 🌐 HBnB Evolution — Business Logic Layer  
@@ -428,8 +426,8 @@ Every diagram, architectural decision, and written explanation reflects the comb
 ## 👩‍💻 Contributors  
 We proudly acknowledge the team members who contributed to the creation of this documentation:
 
-- **Maryam Al-Malki**  
-- **Manar Al-Thaqafi**  
-- **Noura Al-Juhani**
+- **Mariam Al-Malki**  
+- **Manar Al-Thaqfi**  
+- **Norah Al-Juhani**
 
 Their dedication to clarity, structure, and technical accuracy played a key role in producing a comprehensive and professional system blueprint.
