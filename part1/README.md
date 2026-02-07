@@ -221,34 +221,21 @@ Place ↔ Amenity	Many-to-Many	* ↔ *	Places can share amenities
 
 Sequence diagrams illustrate runtime behavior and clearly show how requests flow across layers.
 
-5.1 User Registration
+
+
+5.1 User Registration:
 
 ---
 
-![Sequence Diagram (User Registration)](https://raw.githubusercontent.com/Norahxj/holbertonschool-hbnb/refs/heads/main/part1/Sequence%20Diagram%20(User%20Registration).png).png)
+![Sequence Diagram (User Registration)](https://raw.githubusercontent.com/Norahxj/holbertonschool-hbnb/refs/heads/main/part1/Sequence%20Diagram%20(User%20Registration).png)
 
 ---
 
-Purpose:
-Shows how a new user account is created.
+This sequence diagram illustrates how a new user account is created in the system. The user interacts with a web registration page, which submits the registration request to the API. The request is validated and forwarded to the Business Logic layer through the HBnBFacade. The system verifies email uniqueness, creates a user entity, securely hashes the password, and persists the user data in the database. Alternative flows handle error scenarios such as duplicate email addresses or invalid input.
 
-Flow Summary:
 
-User submits registration form
 
-Presentation Layer validates input
-
-Facade enforces business rules
-
-Email uniqueness is checked
-
-Password is hashed
-
-User is persisted
-
-Success or error response is returned
-
-5.2 Place Creation
+5.2 Place Creation:
 
 ---
 
@@ -256,20 +243,11 @@ Success or error response is returned
 
 ---
 
-Purpose:
-Illustrates how an authenticated user creates a place.
+This diagram describes the workflow for creating a new place listing. The user submits place details through a dedicated page, which sends the request to the API. The Business Logic layer validates permissions and input data before creating a place entity. The place is then stored in the database through the persistence layer. The diagram also includes failure paths for invalid data or unauthorized actions, ensuring robust validation and error handling.
 
-Key Points:
 
-Ownership is validated
 
-Input is verified before persistence
-
-Errors return HTTP 400
-
-Success returns HTTP 201
-
-5.3 Review Submission
+5.3 Review Submission:
 
 ---
 
@@ -277,10 +255,11 @@ Success returns HTTP 201
 
 ---
 
-Purpose:
-Shows how reviews are submitted and validated.
+The review submission sequence diagram shows how users can submit reviews for places. After writing a review, the request is sent to the API and processed by the Business Logic layer. The system validates the review content and ensures the referenced place exists before creating and saving the review. Both successful and failure scenarios are illustrated, highlighting how validation errors are returned to the user.
 
-5.4 Fetching a List of Places
+
+
+5.4 Fetching a List of Places:
 
 ---
 
@@ -288,8 +267,9 @@ Shows how reviews are submitted and validated.
 
 ---
 
-Purpose:
-Demonstrates retrieval of multiple places without modification.
+This diagram demonstrates how users search for available places. The user submits search filters through a search page, which forwards the request to the API. The Business Logic layer retrieves matching places from the database, formats the results, and returns them to the Presentation layer. The diagram includes an alternative flow for empty results, ensuring the system gracefully handles searches with no matches.
+
+
 
 📝 6. Conclusion
 
