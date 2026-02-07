@@ -129,99 +129,167 @@ Future scalability
 🧩 3. Business Logic Layer — Class Diagram
 
 This section describes the domain model, which represents the core concepts and rules of the HBnB system.
+# 🌐 HBnB Evolution — Business Logic Layer  
+## 🧩 Detailed Class Diagram (Task 1)
 
-🖼️ 3.1 Class Diagram
+### 📘 Overview  
+This document presents the **Detailed Class Diagram** for the **Business Logic Layer** of the HBnB Evolution application.  
+The goal of this task is to model the core domain entities, their attributes, behaviors, and relationships using standard UML notation.
+
+The Business Logic Layer includes the following entities:
+
+- **User**
+- **Place**
+- **Review**
+- **Amenity**
+
+*Each entity includes:
+- A unique identifier (`UUID4`)
+- Audit fields (`created_at`, `updated_at`)
+- Attributes describing its state
+- Methods describing its behavior
+- Proper UML visibility (`+` public, `-` private)
+
+> **Note:** All attributes and methods are public except `password`, which is private for security reasons.
+
+---
+
+## 🖼️ Class Diagram  
+> ![Class Diagram](https://raw.githubusercontent.com/Norahxj/holbertonschool-hbnb/refs/heads/main/part1/Class%20Diagram.png)
+
+### 👤 **User**
+Represents a platform user (regular or admin).
+
+#### **Attributes**
+| Visibility | Name | Type |
+|-----------|------|------|
+| + | id | UUID |
+| + | first_name | String |
+| + | last_name | String |
+| + | email | String |
+| - | password | String |
+| + | is_admin | Boolean |
+| + | created_at | DateTime |
+| + | updated_at | DateTime |
+
+#### **Methods**
+- `+ register()`
+- `+ updateProfile()`
+- `+ delete()`
+
+#### **Notes**
+- A user can own multiple places.
+- A user can write multiple reviews.
+- Password is private for security.
+
+---
+
+### 🏠 **Place**
+Represents a property listed by a user.
+
+#### **Attributes**
+| Visibility | Name | Type |
+|-----------|------|------|
+| + | id | UUID |
+| + | title | String |
+| + | description | String |
+| + | price | Float |
+| + | latitude | Float |
+| + | longitude | Float |
+| + | owner_id | UUID |
+| + | created_at | DateTime |
+| + | updated_at | DateTime |
+
+#### **Methods**
+- `+ create()`
+- `+ update()`
+- `+ delete()`
+- `+ listId()` *(as required by project)*
+
+#### **Notes**
+- A place belongs to exactly one user.
+- A place can have many reviews.
+- A place can have many amenities (many‑to‑many).
+
+---
+
+### ⭐ **Review**
+Represents a user’s review on a place.
+
+#### **Attributes**
+| Visibility | Name | Type |
+|-----------|------|------|
+| + | id | UUID |
+| + | rating | int |
+| + | comment | String |
+| + | user_id | UUID |
+| + | place_id | UUID |
+| + | created_at | DateTime |
+| + | updated_at | DateTime |
+
+#### **Methods**
+- `+ create()`
+- `+ update()`
+- `+ delete()`
+- `+ listId()` *(or listByPlace())*
+
+#### **Notes**
+- A review belongs to one user and one place.
+
+---
+
+### 🛎️ **Amenity**
+Represents a feature or service available at a place.
+
+#### **Attributes**
+| Visibility | Name | Type |
+|-----------|------|------|
+| + | id | UUID |
+| + | name | String |
+| + | description | String |
+| + | created_at | DateTime |
+| + | updated_at | DateTime |
+
+#### **Methods**
+- `+ create()`
+- `+ update()`
+- `+ delete()`
+
+#### **Notes**
+- Amenity has a many‑to‑many relationship with Place.
+
+---
+
+## 🔗 Relationships Summary
+
+| Relationship | Type | Multiplicity | Meaning |
+|-------------|------|--------------|---------|
+| User — Place | Association | 1 → 0..* | A user can own multiple places |
+| User — Review | Association | 1 → 0..* | A user can write multiple reviews |
+| Place — Review | Association | 1 → 0..* | A place can have multiple reviews |
+| Place — Amenity | Association (M:N) | * ↔ * | A place can have many amenities and vice versa |
+
+---
+
+## 📝 Notes on UML Design  
+- Visibility is represented using UML notation:  
+  - `+` public  
+  - `-` private  
+- No lists appear inside methods — multiplicity handles that.
+- All entities include UUID and audit timestamps.
+- Diagram follows the Business Logic Layer requirements exactly.
+
+---
+
+## 🎯 Conclusion  
+This class diagram provides a complete and accurate representation of the HBnB Business Logic Layer.  
+It will serve as the foundation for implementing the models and business rules in later project phase.
 
 ---
 
 ![Class Diagram](https://raw.githubusercontent.com/Norahxj/holbertonschool-hbnb/refs/heads/main/part1/Class%20Diagram.png)
 
 ---
-
-Diagram Purpose:
-
-Defines core entities
-
-Shows attributes and methods
-
-Illustrates relationships and multiplicities
-
-Clarifies ownership and dependencies
-
-🧬 3.2 Entity Explanations
-👤 User
-
-Represents a registered platform user.
-
-Responsibilities:
-
-Register and manage an account
-
-Own places
-
-Submit reviews
-
-Design Notes:
-
-Password is private for security
-
-Business rules belong in this layer
-
-Persistence is handled externally via repositories
-
-🏠 Place
-
-Represents a property listed by a user.
-
-Responsibilities:
-
-Store property details
-
-Maintain ownership relationship
-
-Aggregate reviews and amenities
-
-Design Notes:
-
-A place must belong to exactly one user
-
-Acts as a central entity in the domain
-
-⭐ Review
-
-Represents feedback provided by a user for a place.
-
-Responsibilities:
-
-Store rating and comment
-
-Enforce relationship with user and place
-
-Design Notes:
-
-Reviews cannot exist without a user and a place
-
-🛎️ Amenity
-
-Represents a feature or service offered by a place.
-
-Responsibilities:
-
-Describe reusable amenities
-
-Support many-to-many relationships
-
-🔗 4. Relationships Summary
-Relationship	Type	Multiplicity	Description
-User → Place	Association	1 → 0..*	A user can own multiple places
-User → Review	Association	1 → 0..*	A user can submit multiple reviews
-Place → Review	Association	1 → 0..*	A place can have multiple reviews
-Place ↔ Amenity	Many-to-Many	* ↔ *	Places can share amenities
-🔄 5. Sequence Diagrams — API Interaction Flow
-
-Sequence diagrams illustrate runtime behavior and clearly show how requests flow across layers.
-
-
 
 5.1 User Registration:
 
