@@ -7,7 +7,7 @@ Parts **2, 3, and 4** will be added later as the implementation progresses.
 
 ## 📘 Task Sections Inside the Documentation
 
-### 🔹 1. Maryam — High‑Level Package Diagram
+### 🔹 1. Miam — High‑Level Package Diagram
 [Go to Maryam’s section](part1/documentation.md#2-high-level-architecture)
 
 ---
@@ -17,7 +17,7 @@ Parts **2, 3, and 4** will be added later as the implementation progresses.
 
 ---
 
-### 🔹 3. Noura — Sequence Diagrams
+### 🔹 3. rah — Sequence Diagrams
 [Go to Noura’s section](part1/documentation.md#-sequence-diagrams-for-api-calls)
 
 ---
@@ -39,9 +39,9 @@ The following parts will be added soon:
 
 ## 👩‍💻 Team
 
-- **Maryam Al‑Malki** — Package Diagram  
-- **Manar Al‑Thaqafi** — Class Diagram  
-- **Noura Al‑Juhani** — Sequence Diagrams  
+- **Mariam Al‑Malki** — Package Diagram  
+- **Manar Al‑Tqfii** — Class Diagram  
+- **Norah Al‑Juhani** — Sequence Diagrams  
 
 ---
 
