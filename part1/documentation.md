@@ -1,98 +1,98 @@
-HbnB - UML Project (Part1)
+# 📘 HBnB Evolution — System Documentation  
+## 🏗️ Overview  
 
-🏗️ 1. Introduction
+This document presents the full architectural and behavioral design of the HBnB Evolution platform.  
+It compiles all UML diagrams created during the design phase and explains how the system’s components interact across the Presentation, Business Logic, and Persistence layers.  
+The goal of this documentation is to guide development, ensure consistent understanding among team members, and support long‑term maintainability and scalability.
+
+---
+
+# 1. Introduction
 
 The HBnB project is a simplified AirBnB-like platform designed to demonstrate strong software engineering principles, including layered architecture, object-oriented design, and clear separation of concerns.
 
 This document compiles all architectural and behavioral diagrams produced during the design phase and serves as a technical blueprint for the system. It explains what the system is composed of, how its components interact, and why specific design decisions were made.
 
-Purpose of This Document
+## Purpose of This Document
 
 This documentation is intended to:
 
-Guide the implementation phase of the HBnB project
+- Guide the implementation phase of the HBnB project  
+- Provide a shared technical reference for developers  
+- Clarify architectural boundaries and responsibilities  
+- Document the business logic and API interaction flow  
+- Support future maintenance and scalability  
 
-Provide a shared technical reference for developers
+---
 
-Clarify architectural boundaries and responsibilities
-
-Document the business logic and API interaction flow
-
-Support future maintenance and scalability
-
-🧱 2. High-Level Architecture
+# 2. High-Level Architecture
 
 HBnB follows a three-layer architecture, a widely used architectural style that improves modularity, maintainability, and testability.
 
 The layers are:
 
-Presentation Layer
-
-Business Logic Layer
-
-Persistence Layer
+- **Presentation Layer**  
+- **Business Logic Layer**  
+- **Persistence Layer**
 
 Each layer has a clearly defined responsibility, and dependencies flow in one direction only, from top to bottom.
 
-🔹 Presentation Layer
+---
+
+## Presentation Layer
 
 The Presentation Layer is the entry point of the system.
 
-Responsibilities:
+### Responsibilities:
 
-Expose RESTful API endpoints
+- Expose RESTful API endpoints  
+- Handle HTTP requests and responses  
+- Perform basic request validation and input sanitization  
+- Translate client requests into business operations  
+- Return appropriate HTTP status codes (200, 201, 400, 404, etc.)
 
-Handle HTTP requests and responses
-
-Perform basic request validation and input sanitization
-
-Translate client requests into business operations
-
-Return appropriate HTTP status codes (200, 201, 400, 404, etc.)
-
-Key Design Rule:
-This layer does not contain business logic or database operations.
+### Key Design Rule:
+This layer does **not** contain business logic or database operations.  
 All core processing is delegated to the Business Logic Layer via the facade.
 
-🔹 Business Logic Layer
+---
+
+## Business Logic Layer
 
 The Business Logic Layer represents the core domain of the application.
 
-Responsibilities:
+### Responsibilities:
 
-Define domain entities (User, Place, Review, Amenity)
+- Define domain entities (User, Place, Review, Amenity)  
+- Enforce business rules and validations  
+- Coordinate workflows across entities  
+- Act as the single communication point for the Presentation Layer  
 
-Enforce business rules and validations
+### Facade Pattern:
+All interactions pass through **HBnBFacade**, which:
 
-Coordinate workflows across entities
+- Simplifies communication  
+- Prevents tight coupling  
+- Centralizes business workflows  
 
-Act as the single communication point for the Presentation Layer
+---
 
-Facade Pattern:
-All interactions pass through HBnBFacade, which:
-
-Simplifies communication
-
-Prevents tight coupling
-
-Centralizes business workflows
-
-🔹 Persistence Layer
+## Persistence Layer
 
 The Persistence Layer is responsible for data storage and retrieval.
 
-Responsibilities:
+### Responsibilities:
 
-Persist domain objects
+- Persist domain objects  
+- Retrieve and query data  
+- Abstract database implementation details  
 
-Retrieve and query data
+### Key Design Rule:
+This layer contains **no business logic** — only data access operations.
 
-Abstract database implementation details
+---
 
-Key Design Rule:
-This layer contains no business logic — only data access operations.
-
-🗂️ 2.1 High-Level Package Diagram
+# 2.1 High-Level Package Diagram
 
 ---
 
@@ -100,31 +100,28 @@ This layer contains no business logic — only data access operations.
 
 ---
 
-Diagram Purpose:
+### Diagram Purpose:
 
-Illustrates the three system layers
+- Illustrates the three system layers  
+- Shows dependency direction  
+- Highlights the facade as the only gateway to business logic  
 
-Shows dependency direction
+---
 
-Highlights the facade as the only gateway to business logic
+## Architectural Design Rationale
 
-🧠 Architectural Design Rationale
-
-The layered architecture enforces separation of concerns
+The layered architecture enforces separation of concerns.
 
 The facade pattern prevents the Presentation Layer from:
 
-Accessing entities directly
-
-Depending on internal business logic structure
+- Accessing entities directly  
+- Depending on internal business logic structure  
 
 This design supports:
 
-Easier testing
-
-Cleaner APIs
-
-Future scalability
+- Easier testing  
+- Cleaner APIs  
+- Future scalability  
 
 🧩 3. Business Logic Layer — Class Diagram
 
@@ -287,11 +284,15 @@ It will serve as the foundation for implementing the models and business rules i
 
 ---
 
-![Class Diagram](https://raw.githubusercontent.com/Norahxj/holbertonschool-hbnb/refs/heads/main/part1/Class%20Diagram.png)
+# 🔄 Sequence Diagrams for API Calls  
+## 🧩 Overview  
+
+This section provides sequence diagrams that explain how the HBnB system handles major API calls and how data flows between layers during each operation.  
+These diagrams help visualize the internal workflow of the application and clarify how different components collaborate to process user requests.
 
 ---
 
-5.1 User Registration:
+# 5.1 User Registration
 
 ---
 
@@ -299,11 +300,28 @@ It will serve as the foundation for implementing the models and business rules i
 
 ---
 
-This sequence diagram illustrates how a new user account is created in the system. The user interacts with a web registration page, which submits the registration request to the API. The request is validated and forwarded to the Business Logic layer through the HBnBFacade. The system verifies email uniqueness, creates a user entity, securely hashes the password, and persists the user data in the database. Alternative flows handle error scenarios such as duplicate email addresses or invalid input.
+The **User Registration** sequence diagram provides a detailed view of how a new user account is created within the HBnB system.  
+The process begins at the **Presentation Layer**, where the user fills out the registration form on the web page. Before any data is sent to the server, the page performs **client-side validation** to ensure that the input format is correct and required fields are not empty.
 
+Once validated, the request is forwarded to the **API**, which acts as the entry point to the backend. The API then delegates the request to the **HBnBFacade**, the central coordinator of the Business Logic Layer.
 
+Inside the **UserModel**, the system performs several critical operations:
 
-5.2 Place Creation:
+- Parsing and sanitizing the input  
+- Checking required fields  
+- Querying the **UserRepository** to verify if the email already exists  
+- Handling the two possible outcomes:
+  - **Email already in use:** The system returns an error through the API, and the user sees a clear error message.
+  - **Email is unique:** A new User object is created, the password is securely hashed, and the user is saved in the database.
+
+The **Persistence Layer** handles the actual database operations, including the SELECT and INSERT queries.  
+Once the user is successfully stored, the success response travels back up through the layers until the user sees a confirmation message.
+
+This diagram highlights the system’s emphasis on **security**, **data validation**, and **error handling**, ensuring a smooth and safe registration experience.
+
+---
+
+# 5.2 Place Creation
 
 ---
 
@@ -311,11 +329,28 @@ This sequence diagram illustrates how a new user account is created in the syste
 
 ---
 
-This diagram describes the workflow for creating a new place listing. The user submits place details through a dedicated page, which sends the request to the API. The Business Logic layer validates permissions and input data before creating a place entity. The place is then stored in the database through the persistence layer. The diagram also includes failure paths for invalid data or unauthorized actions, ensuring robust validation and error handling.
+The **Place Creation** sequence diagram illustrates the workflow for adding a new place listing to the HBnB platform.  
+The process begins when the user enters place details—such as name, description, price, and location—into the dedicated creation page.
 
+The request is sent to the **API**, which forwards it to the **HBnBFacade** for validation and processing.  
+This diagram emphasizes two major validation steps:
 
+1. **Permission Validation**  
+   The system checks whether the user is authorized to create a place. Unauthorized attempts immediately trigger an error response.
 
-5.3 Review Submission:
+2. **Field Validation**  
+   The system ensures that all required fields are present and correctly formatted.
+
+If any validation fails, the API returns a **400 Failure response**, and the user is shown an error message.  
+If the data is valid, the **PlaceModel** creates a new Place object and sends it to the **PlaceRepository**, which performs the INSERT operation into the database.
+
+Once the database confirms the insertion, the success response travels back through the layers, and the user receives a **201 Place Created** confirmation.
+
+This diagram demonstrates how the system enforces **data integrity**, **authorization rules**, and **robust error handling**.
+
+---
+
+# 5.3 Review Submission
 
 ---
 
@@ -323,11 +358,30 @@ This diagram describes the workflow for creating a new place listing. The user s
 
 ---
 
-The review submission sequence diagram shows how users can submit reviews for places. After writing a review, the request is sent to the API and processed by the Business Logic layer. The system validates the review content and ensures the referenced place exists before creating and saving the review. Both successful and failure scenarios are illustrated, highlighting how validation errors are returned to the user.
+The **Review Submission** sequence diagram explains how users submit reviews for places they have visited.  
+The process begins when the user writes a review on the Review Page, which sends the review data to the API.
 
+The **HBnBFacade** handles the business logic, starting with:
 
+- **Rating Validation:** Ensuring the rating is within acceptable limits.  
+  Invalid ratings immediately trigger an error response.
 
-5.4 Fetching a List of Places:
+- **Place Existence Check:**  
+  The system verifies that the place being reviewed actually exists by querying the database.
+
+If the place exists and the review is valid, the **ReviewModel** creates a Review object and sends it to the **ReviewRepository**, which inserts it into the database.
+
+Once the review is saved, the user receives a **201 Review Submitted** confirmation.
+
+This diagram highlights the system’s commitment to:
+
+- Preventing invalid or malicious reviews  
+- Ensuring reviews are tied to real places  
+- Maintaining data consistency across layers  
+
+---
+
+# 5.4 Fetching a List of Places
 
 ---
 
@@ -335,23 +389,64 @@ The review submission sequence diagram shows how users can submit reviews for pl
 
 ---
 
-This diagram demonstrates how users search for available places. The user submits search filters through a search page, which forwards the request to the API. The Business Logic layer retrieves matching places from the database, formats the results, and returns them to the Presentation layer. The diagram includes an alternative flow for empty results, ensuring the system gracefully handles searches with no matches.
+The **Fetching a List of Places** sequence diagram describes how users search for available places using filters such as location, price range, or amenities.
 
+The search request is submitted through the search page and forwarded to the API.  
+The **HBnBFacade** coordinates the retrieval process by querying the **PlaceRepository**, which interacts with the database to fetch matching results.
 
+Two outcomes are shown:
 
-📝 6. Conclusion
+1. **Matching Places Found:**  
+   The results are formatted and returned to the user.
 
-This document provides a complete and structured technical overview of the HBnB Evolution system. It combines architectural design, domain modeling, and interaction flows into a single reference that supports implementation, testing, and future evolution.
+2. **No Matches:**  
+   The system returns an empty list, and the user interface displays a friendly “No results found” message.
 
-By enforcing clear boundaries between layers and documenting interactions thoroughly, the HBnB system is designed to be robust, maintainable, and scalable.
+This diagram demonstrates how the system supports efficient searching while maintaining a clean separation between layers.
 
-✨ Authors
+---
 
-Norah Aljuhani
-Holberton School — Saudi Arabia
+# 6. Conclusion
 
-Manar Althqfi
-Holberton School — Saudi Arabia
+The diagrams collectively provide a comprehensive view of how the HBnB Evolution system handles user registration, place creation, review submission, and place searching.  
+Each diagram reinforces the system’s architectural principles:
 
-Mariam Almalki
-Holberton School — Saudi Arabia
+- Clear separation between Presentation, Business Logic, and Persistence layers  
+- Strong validation and error handling  
+- Secure data processing  
+- Consistent communication flow across components  
+
+This documentation serves as a solid reference for developers, testers, and future contributors.
+
+---
+
+# Notes on the Diagrams and Work
+
+The diagrams created for this project demonstrate a strong understanding of system architecture and sequence modeling.  
+Your friend’s work shows:
+
+- Excellent clarity in representing interactions  
+- Accurate layering between components  
+- Inclusion of both success and failure paths  
+- Realistic modeling of validation, authorization, and persistence  
+
+These visuals significantly enhance the documentation and make the HBnB system easier to understand, maintain, and extend.
+
+They also align perfectly with the structure of the project repository, including the documentation hosted at:
+
+- https://github.com/Norahxj/holbertonschool-hbnb/blob/main/part1/documentation.md
+
+The combination of diagrams and written explanations results in a professional, complete, and developer‑friendly technical document.
+# ✨ 7. Acknowledgments
+
+This documentation was collaboratively created as part of the HBnB Evolution project.  
+Every diagram, architectural decision, and written explanation reflects the combined effort and teamwork invested throughout the design phase.
+
+## 👩‍💻 Contributors  
+We proudly acknowledge the team members who contributed to the creation of this documentation:
+
+- **Maryam Al-Malki**  
+- **Manar Al-Thaqafi**  
+- **Noura Al-Juhani**
+
+Their dedication to clarity, structure, and technical accuracy played a key role in producing a comprehensive and professional system blueprint.
