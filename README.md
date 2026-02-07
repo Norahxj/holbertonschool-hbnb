@@ -42,9 +42,16 @@ Communication between the Presentation and Business Logic layers is handled usin
 ### 📊 Diagrams Included in Part 1
 
 - High-Level Package Diagram  
+<img src="part1/Package Diagram .png" width="700">
 - Detailed Class Diagram  
+<img src="part1/Class Diagram.png" width="800">
 - Sequence Diagrams for API Calls  
-
+<p align="left">
+<img src="part1/Sequence Diagram (User Registration).png" width="400">
+<img src="part1/Sequence Diagram (Place Creation).png" width="400">
+<img src="part1/Sequence Diagram (Review Submission).png" width="400">
+<img src="part1/Sequence Diagram (Fetching a List of Places).png" width="400">
+</p>
 These diagrams provide a complete technical blueprint that will guide future implementation phases.
 
 ---
