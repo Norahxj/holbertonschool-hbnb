@@ -1,71 +1,49 @@
-# HBnB Evolution
+# 🏡 HBnB Evolution — Part 1: UML Documentation
 
-HBnB Evolution is a simplified AirBnB-like platform developed as a software engineering project. The system allows users to register, list properties, manage amenities, and leave reviews, following modern software architecture principles.
-
-This project is divided into multiple parts, each focusing on a different stage of system development.
-
----
-
-## 🚀 Project Structure
-
-| Part | Focus |
-|------|------|
-| **Part 1** | System architecture & technical documentation |
-| Part 2 | *(To be added later)* |
-| Part 3 | *(To be added later)* |
-| Part 4 | *(To be added later)* |
+This part contains all UML diagrams required for the HBnB Evolution project.  
+Parts **2, 3, and 4** will be added later as the implementation progresses.
 
 ---
 
-## 📘 Part 1 – Technical Documentation
+## 📘 Task Sections Inside the Documentation
 
-Part 1 focuses on designing the system before implementation. It defines the structure, components, and interactions of the HBnB application.
-
-### 🔹 What is covered in Part 1
-
-- High-Level System Architecture  
-- Business Logic Domain Model  
-- API Interaction Flows  
-
-### 🔹 Architecture Style
-
-HBnB uses a **three-layer architecture**:
-
-1. **Presentation Layer** – APIs and services  
-2. **Business Logic Layer** – Core models and rules  
-3. **Persistence Layer** – Database interaction  
-
-Communication between the Presentation and Business Logic layers is handled using the **Facade Pattern**, ensuring modularity and scalability.
+### 🔹 1. Maryam — High‑Level Package Diagram
+[Go to Maryam’s section](HBnB_full_documentation.md#2-high-level-architecture)
 
 ---
 
-### 📊 Diagrams Included in Part 1
-
-- High-Level Package Diagram  
-<img src="part1/Package Diagram .png" width="700">
-- Detailed Class Diagram  
-<img src="part1/Class Diagram.png" width="800">
-- Sequence Diagrams for API Calls  
-<p align="left">
-<img src="part1/Sequence Diagram (User Registration).png" width="400">
-<img src="part1/Sequence Diagram (Place Creation).png" width="400">
-<img src="part1/Sequence Diagram (Review Submission).png" width="400">
-<img src="part1/Sequence Diagram (Fetching a List of Places).png" width="400">
-</p>
-These diagrams provide a complete technical blueprint that will guide future implementation phases.
+### 🔹 2. Manar — Detailed Class Diagram
+[Go to Manar’s section](HBnB_full_documentation.md#-hbnb-evolution--business-logic-layer)
 
 ---
 
-## 🎯 Project Goal
-
-The objective of HBnB Evolution is to apply software engineering best practices such as:
-
-- Layered architecture  
-- UML modeling  
-- Clean separation of concerns  
-- Maintainable and scalable design  
+### 🔹 3. Noura — Sequence Diagrams
+[Go to Noura’s section](HBnB_full_documentation.md#-sequence-diagrams-for-api-calls)
 
 ---
 
-More details about implementation and additional project parts will be added in future updates.
+### 🔹 4. Full Documentation
+[Open full documentation](HBnB_full_documentation.md)
 
+---
+
+## 🚀 Coming Soon
+
+The following parts will be added soon:
+
+- **Part 2:** Business Logic Implementation  
+- **Part 3:** Persistence Layer + Database  
+- **Part 4:** API Layer  
+
+---
+
+## 👩‍💻 Team
+
+- **Maryam Al‑Malki** — Package Diagram  
+- **Manar Al‑Thaqafi** — Class Diagram  
+- **Noura Al‑Juhani** — Sequence Diagrams  
+
+---
+
+## 📜 Note
+This project is part of the Holberton School curriculum.
