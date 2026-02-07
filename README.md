@@ -7,13 +7,13 @@ Parts **2, 3, and 4** will be added later as the implementation progresses.
 
 ## 📘 Task Sections Inside the Documentation
 
-### 🔹 1. Mariam — High‑Level Package Diagram
+### 🔹 1. Mariam — High-Level Package Diagram
 [Go to Mariam’s section](part1/documentation.md#2-high-level-architecture)
 
 ---
 
-### 🔹 2. Althqfi — Detailed Class Diagram
-[Go to Althqfi’s section](part1/documentation.md#-hbnb-evolution--business-logic-layer)
+### 🔹 2. Manar — Detailed Class Diagram
+[Go to Manar’s section](part1/documentation.md#-hbnb-evolution--business-logic-layer)
 
 ---
 
@@ -40,7 +40,7 @@ The following parts will be added soon:
 ## 👩‍💻 Team
 
 - **Mariam** — Package Diagram  
-- **Althqfi** — Class Diagram  
+- **Manar** — Class Diagram  
 - **Norah** — Sequence Diagrams  
 
 ---
