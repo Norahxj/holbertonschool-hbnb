@@ -225,7 +225,7 @@ Sequence diagrams illustrate runtime behavior and clearly show how requests flow
 
 ---
 
-![Sequence Diagram (User Registration)](Sequence_Diagram_User_Registration).png)
+![Sequence Diagram (User Registration)](https://raw.githubusercontent.com/Norahxj/holbertonschool-hbnb/refs/heads/main/part1/Sequence%20Diagram%20(User%20Registration).png).png)
 
 ---
 
