@@ -426,8 +426,8 @@ Every diagram, architectural decision, and written explanation reflects the comb
 ## 👩‍💻 Contributors  
 We proudly acknowledge the team members who contributed to the creation of this documentation:
 
-- **Mariam Al-Malki**  
-- **Manar Al-Thaqfi**  
-- **Norah Al-Juhani**
+- **Mariam Almaleki**  
+- **Manar Althqfi**  
+- **Norah Aljuhani**
 
 Their dedication to clarity, structure, and technical accuracy played a key role in producing a comprehensive and professional system blueprint.
