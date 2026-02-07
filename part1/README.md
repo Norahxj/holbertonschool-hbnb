@@ -96,7 +96,7 @@ This layer contains no business logic — only data access operations.
 
 ---
 
-![Package Diagram ](Package_Diagram .png)
+![Package Diagram ](https://raw.githubusercontent.com/Norahxj/holbertonschool-hbnb/refs/heads/main/part1/Package%20Diagram%20.png)
 
 ---
 
