@@ -8,7 +8,6 @@ def create_app():
 
     api = Api(app, version="1.0", title="HBnB API", prefix="/api/v1")
 
-    # load only the users namespace for now
     from app.api.v1.users import api as users_ns
     api.add_namespace(users_ns)
 
