@@ -1,9 +1,10 @@
-from app.persistence.repository import Repository
+from app.persistence.repository import storage
 from app.models.user import User
 
 class HBnBFacade:
     def __init__(self):
-        self.repo = Repository()
+        # Use the global storage instance
+        self.repo = storage
 
     def create_user(self, data):
         user = User(**data)

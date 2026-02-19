@@ -1,5 +1,5 @@
 class Repository:
-    def init(self):
+    def __init__(self):
         self.users = {}
         self.places = {}
         self.amenities = {}
