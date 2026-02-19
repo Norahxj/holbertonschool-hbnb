@@ -34,10 +34,10 @@ class Place(BaseModel):
 
     def add_review(self, review):
         self.reviews.append(review)
-        self.save()
+        self.touch()
 
     def add_amenity(self, amenity):
         if not isinstance(amenity, Amenity):
             raise ValueError("amenity must be an Amenity instance")
         self.amenities.append(amenity)
-        self.save()
+        self.touch()
