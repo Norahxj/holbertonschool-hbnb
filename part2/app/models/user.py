@@ -1,10 +1,10 @@
-from models.base_model import BaseModel
+from app.models.base_model import BaseModel
 import re
 
 class User(BaseModel):
-    def __init__(self, first_name, last_name, email, password,
-                 is_admin=False, is_owner=False, *args, **kwargs):
-         super().__init__(*args, **kwargs)
+    def init(self, first_name, last_name, email, password,
+                 is_admin=False, is_owner=False, *args, kwargs):
+        super().init(*args, kwargs)
 
         if not first_name or not first_name.strip():
             raise ValueError("first_name is required")

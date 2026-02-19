@@ -1,69 +1,65 @@
-from flask import jsonify, request
-from models.user import User
-from models import storage
-from api.v1.views import app_views
+from flask_restx import Namespace, Resource, fields
+from app.models.user import User
+from app.persistence.repository import storage
 
-@app_views.route("/users/", methods=["POST"])
-def create_user():
-    data = request.get_json()
+api = Namespace("users", description="Users operations")
 
-    if not data:
-        return jsonify({"error": "Missing JSON"}), 400
+user_model = api.model("User", {
+    "id": fields.String(readonly=True),
+    "first_name": fields.String(required=True),
+    "last_name": fields.String(required=True),
+    "email": fields.String(required=True),
+    "password": fields.String(required=True),
+    "is_admin": fields.Boolean(default=False),
+    "is_owner": fields.Boolean(default=False)
+})
 
-    required = ["first_name", "last_name", "email", "password"]
-    for field in required:
-        if field not in data:
-            return jsonify({"error": f"{field} is required"}), 400
 
-    is_admin = data.get("is_admin", False)
-    is_owner = data.get("is_owner", False)
+@api.route("/")
+class UsersList(Resource):
+    @api.marshal_list_with(user_model)
+    def get(self):
+        return [u.to_dict() for u in storage.all_users()]
 
-    try:
+    @api.expect(user_model)
+    @api.marshal_with(user_model, code=201)
+    def post(self):
+        data = api.payload
+
         user = User(
             first_name=data["first_name"],
             last_name=data["last_name"],
             email=data["email"],
             password=data["password"],
-            is_admin=is_admin,
-            is_owner=is_owner
+            is_admin=data.get("is_admin", False),
+            is_owner=data.get("is_owner", False)
         )
-        storage.new(user)
-        storage.save()
-        return jsonify(user.to_dict()), 201
 
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
+        storage.save_user(user)
+        return user.to_dict(), 201
 
 
-@app_views.route("/users/", methods=["GET"])
-def get_users():
-    all_users = storage.all("User")
-    return jsonify([u.to_dict() for u in all_users.values()])
+@api.route("/<user_id>")
+class UserItem(Resource):
+    @api.marshal_with(user_model)
+    def get(self, user_id):
+        user = storage.get_user(user_id)
+        if not user:
+            api.abort(404, "User not found")
+        return user.to_dict()
 
+    def delete(self, user_id):
+        users = storage.all_users()
+        if not users:
+            api.abort(404, "No users found")
 
-@app_views.route("/users/<user_id>", methods=["GET"])
-def get_user(user_id):
-    user = storage.get("User", user_id)
-    if not user:
-        return jsonify({"error": "User not found"}), 404
-    return jsonify(user.to_dict())
+        current_user = users[0]
 
+        if not current_user.is_admin:
+            api.abort(403, "Admins only")
 
-@app_views.route("/users/<user_id>", methods=["DELETE"])
-def delete_user(user_id):
-    all_users = storage.all("User")
-    if not all_users:
-        return jsonify({"error": "No users found"}), 404
+        deleted = storage.delete_user(user_id)
+        if not deleted:
+            api.abort(404, "User not found")
 
-    current_user = list(all_users.values())[0]
-
-    if not current_user.is_admin:
-        return jsonify({"error": "Admins only"}), 403
-
-    user = storage.get("User", user_id)
-    if not user:
-        return jsonify({"error": "User not found"}), 404
-
-    storage.delete(user)
-    storage.save()
-    return jsonify({"message": "User deleted"})
+        return {"message": "User deleted"}

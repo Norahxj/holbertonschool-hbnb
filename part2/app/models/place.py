@@ -1,11 +1,11 @@
-from app.models.base import BaseModel
+from app.models.base_model import BaseModel
 from app.models.user import User
 from app.models.amenity import Amenity
 
 
 class Place(BaseModel):
-    def __init__(self, title, description, price, latitude, longitude, owner):
-        super().__init__()
+    def init(self, title, description, price, latitude, longitude, owner):
+        super().init()
 
         if not title or len(title) > 100:
             raise ValueError("title is required and must be <= 100 characters")
