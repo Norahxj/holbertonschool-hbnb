@@ -3,6 +3,7 @@ class Repository:
         self.users = {}
         self.places = {}
         self.amenities = {}
+        self.reviews = {}
 
     # ---------------- USERS ----------------
     def save_user(self, user):
@@ -45,6 +46,20 @@ class Repository:
 
     def all_amenities(self):
         return list(self.amenities.values())
+
+    # ---------------- REVIEWS ----------------
+    def save_review(self, review):
+        self.reviews[review.id] = review
+        return review
+
+    def get_review(self, review_id):
+        return self.reviews.get(review_id)
+
+    def delete_review(self, review_id):
+        return self.reviews.pop(review_id, None)
+
+    def all_reviews(self):
+        return list(self.reviews.values())
 
 
 # instance used by the whole app

@@ -1,7 +1,6 @@
-from place import Place
-from user import User
-
-from base_model import BaseModel
+from app.models.place import Place
+from app.models.user import User
+from app.models.base_model import BaseModel
 
 class Review(BaseModel):
     def __init__(self, user_id, place_id, comment, rating):
@@ -9,7 +8,6 @@ class Review(BaseModel):
         super().__init__()
         self.user_id = user_id
         self.place_id = place_id
-        # self.name = name
         self.comment = comment
         self.ratings = rating
         self.review_id = self.id

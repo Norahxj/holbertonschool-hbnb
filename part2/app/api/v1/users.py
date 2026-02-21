@@ -14,7 +14,6 @@ user_model = api.model("User", {
     "is_owner": fields.Boolean(default=False)
 })
 
-
 @api.route("/")
 class UsersList(Resource):
     @api.marshal_list_with(user_model)
@@ -26,6 +25,7 @@ class UsersList(Resource):
     def post(self):
         data = api.payload
 
+        # Create user
         user = User(
             first_name=data["first_name"],
             last_name=data["last_name"],
@@ -39,7 +39,7 @@ class UsersList(Resource):
         return user.to_dict(), 201
 
 
-@api.route("/<user_id>")
+@api.route("/<string:user_id>")
 class UserItem(Resource):
     @api.marshal_with(user_model)
     def get(self, user_id):
@@ -49,11 +49,12 @@ class UserItem(Resource):
         return user.to_dict()
 
     def delete(self, user_id):
+        # Only admin can delete
         users = storage.all_users()
         if not users:
             api.abort(404, "No users found")
 
-        current_user = users[0]
+        current_user = users[0]  # simulate logged-in user
 
         if not current_user.is_admin:
             api.abort(403, "Admins only")
