@@ -1,121 +1,54 @@
-# HBnB — System Documentation  
-## Task 6: API Testing and System Architecture  
-Prepared by: Manar
+# HBnB — Task 6 Documentation  
 
 ---
 
-# 1. Introduction
+# 1. Overview
 
-The HBnB project is a simplified AirBnB-like platform designed to demonstrate strong software engineering principles, including layered architecture, object-oriented design, and clear separation of concerns.
+Task 6 required testing all API endpoints of the HBnB project and documenting:
 
-This document provides a complete technical blueprint for Task 6. It includes:
+- The final project structure  
+- The exact responsibilities of each team member  
+- The real behavior of each endpoint during testing  
+- Success and failure cases  
+- Returned HTTP status codes  
+- Swagger usage for API verification  
 
-- High-level architecture  
-- Layer responsibilities  
-- Domain model overview  
-- API testing for Users, Places, Reviews, and Amenities  
-- Success and failure test cases  
-- Team responsibilities  
-- Final project structure  
-
-This documentation is intended to guide implementation, support maintenance, and serve as a shared technical reference.
+This document reflects the actual implementation and real test results observed during development.
 
 ---
 
-# 2. Team Responsibilities
+# 2. Team Responsibilities (Actual Work Delivered)
 
-The HBnB project was developed collaboratively. Each team member was responsible for a specific domain.
+## Maryam
+- Designed the complete project structure  
+- Created the folder organization:
+  - api/v1  
+  - models  
+  - services  
+  - persistence  
+- Implemented the Review model  
+- Implemented the Review API endpoints  
+- Ensured proper integration between layers  
+- Connected the API layer to the Business Logic layer via the Facade  
 
-| Team Member | Responsibility |
-|-------------|----------------|
-| Maryam | Full responsibility for the Review entity (model and API), and for designing the overall project structure. |
-| Manar | Responsible for the User entity, the Repository layer (persistence/repository.py), and executing all API testing and documentation. |
-| Noura | Responsible for the Place and Amenity entities and their API endpoints. |
+## Manar
+- Implemented the User model  
+- Implemented the User API endpoints  
+- Implemented the Repository layer (persistence/repository.py)  
+- Executed all Task 6 API tests  
+- Documented all test results  
+- Identified real runtime errors during testing (e.g., KeyError and 404 cases)  
 
----
-
-# 3. High-Level Architecture
-
-HBnB follows a three-layer architecture that improves modularity, maintainability, and testability.
-
-The layers are:
-
-- Presentation Layer  
-- Business Logic Layer  
-- Persistence Layer  
-
-Dependencies flow from top to bottom only.
-
----
-
-## 3.1 Presentation Layer
-
-The Presentation Layer is the entry point of the system.
-
-### Responsibilities
-
-- Expose RESTful API endpoints  
-- Handle HTTP requests and responses  
-- Perform basic request validation  
-- Translate client requests into business operations  
-- Return appropriate HTTP status codes  
-
-### Design Rule
-
-This layer contains no business logic.  
-All core processing is delegated to the Business Logic Layer via the facade.
+## Noura
+- Implemented the Place model  
+- Implemented the Amenity model  
+- Implemented the Place API endpoints  
+- Implemented the Amenity API endpoints  
+- Ensured correct integration between Place and Amenity entities  
 
 ---
 
-## 3.2 Business Logic Layer
-
-The Business Logic Layer represents the core domain of the application.
-
-### Responsibilities
-
-- Define domain entities (User, Place, Review, Amenity)  
-- Enforce business rules and validations  
-- Coordinate workflows across entities  
-- Act as the single communication point for the Presentation Layer  
-
-### Validation Enforcement
-
-All critical validation rules are enforced inside the Business Logic Layer to guarantee data integrity regardless of the request source.
-
-Examples:
-
-- Review rating must be between 1 and 5  
-- Required fields must be validated before object creation  
-- Related entities must exist before associations are created  
-
-### Facade Pattern
-
-All interactions pass through the facade in services/facade.py, which:
-
-- Simplifies communication  
-- Prevents tight coupling  
-- Centralizes business workflows  
-
----
-
-## 3.3 Persistence Layer
-
-The Persistence Layer is responsible for data storage and retrieval.
-
-### Responsibilities
-
-- Persist domain objects  
-- Retrieve and query data  
-- Abstract database implementation details  
-
-### Design Rule
-
-This layer contains no business logic.  
-It only performs data access operations through the repository.
-
----
-
-# 4. Final Project Structure
+# 3. Final Project Structure (Designed by Maryam)
 
 hbnb/
 ├── app/
@@ -145,129 +78,147 @@ hbnb/
 ├── requirements.txt
 ├── README.md
 
----
+The architecture follows a clear layered design:
 
-# 5. Domain Model Overview
+- Presentation Layer → api/
+- Business Logic Layer → models/ and services/
+- Persistence Layer → persistence/
 
-The domain model includes four main entities:
-
-- User  
-- Place  
-- Review  
-- Amenity  
-
-Each entity includes:
-
-- UUID identifier  
-- Audit fields (created_at, updated_at)  
-- Attributes describing its state  
-- Methods describing its behavior
-The Review entity enforces rating validation within the Business Logic Layer to ensure values remain within the accepted range (1–5).
+Each layer has a single responsibility and communicates only with the layer directly below it.
 
 ---
 
-# 6. API Testing
+# 4. Swagger Usage (Actual Behavior)
 
-All tests were executed using curl against:
+During Task 6, Swagger was used to:
 
-http://127.0.0.1:5000/api/v1/
+- Display all available endpoints  
+- Show required request bodies  
+- Show expected responses  
+- Display possible HTTP status codes (200, 201, 400, 404)  
+- Test POST and GET requests quickly  
+- Confirm that routes were properly registered  
 
----
+Swagger documentation was available at:
 
-## 6.1 Review API Validation
+/api/v1/docs
 
-### 6.1.1 Rating Out of Range
+It correctly displayed:
 
-curl -X POST http://127.0.0.1:5000/api/v1/reviews/ \
--H "Content-Type: application/json" \
--d '{"user_id":"valid_uuid","place_id":"valid_uuid","comment":"Bad","rating":10}'
-
-#### Response
-
-{
-    "message": "Rating must be between 1 and 5"
-}
-
-Rating validation is enforced at the Business Logic Layer level.
+- User endpoints  
+- Place endpoints  
+- Review endpoints  
+- Amenity endpoints  
 
 ---
 
-## 6.2 Missing Required Fields
+# 5. API Testing (Actual Results)
 
-curl -X POST http://127.0.0.1:5000/api/v1/reviews/ \
--H "Content-Type: application/json" \
--d '{}'
+## 5.1 User API (Implemented by Manar)
 
-#### Response
+### Create User (Success)
 
-{
-    "message": "Missing required fields"
-}
-
-Raw exceptions are not exposed to the client.  
-Errors are handled and returned in a structured JSON format.
+Result:
+- Returned 201 Created  
+- User was successfully stored  
+- UUID was generated automatically  
 
 ---
 
-## 6.3 Amenity API Testing
+## 5.2 Place API (Implemented by Noura)
 
-### 6.3.1 Create Amenity
+### Create Place (Success)
 
-curl -X POST http://127.0.0.1:5000/api/v1/amenities/ \
--H "Content-Type: application/json" \
--d '{"name":"WiFi"}'
-
-#### Response
-
-{
-    "id": "995359bd-1e8f-411d-af56-7441f35b1f5e",
-    "name": "WiFi",
-    "description": ""
-}
+Result:
+- Returned 201 Created  
+- Place was successfully stored  
+- Owner field remained null (not linked to a user)
 
 ---
 
-### 6.3.2 Get Amenity
+## 5.3 Review API (Implemented by Maryam)
 
-curl -X GET http://127.0.0.1:5000/api/v1/amenities/995359bd-1e8f-411d-af56-7441f35b1f5e
+### Create Review (Success)
 
-#### Response
+Result:
+- Returned 201 Created  
+- Review was successfully created  
+- Foreign keys were validated  
 
-{
-    "id": "995359bd-1e8f-411d-af56-7441f35b1f5e",
-    "name": "WiFi",
-    "description": ""
-}
+### Get Review (Success)
 
-DELETE operation is not implemented for amenities in Part 2 as per project requirements.
+Result:
+- Returned 200 OK  
+- Data retrieved correctly  
 
----
+### Delete Review (Success)
 
-# 7. API Documentation (Swagger)
+Result:
+- Returned 204 No Content  
+- Review was successfully deleted  
 
-The HBnB project includes built-in API documentation using Swagger UI.
+### Get Review After Deletion (Failure)
 
-Swagger operates entirely within the Presentation Layer and does not contain business logic.
-
-It allows developers to:
-
-- Explore all endpoints  
-- View request/response schemas  
-- Test API calls directly from the browser  
-- Validate request formats  
-
-Swagger is available at:
-
-http://127.0.0.1:5000/api/v1/docs
+Result:
+- Returned 404 Not Found  
+- Message: "Review not found"
 
 ---
 
-# 8. Conclusion
+# 6. Error Cases Encountered During Testing
 
-All API endpoints for Users, Places, Reviews, and Amenities were tested successfully.  
+## 6.1 Missing Required Fields
 
-Business rules such as rating validation and required field checks are enforced within the Business Logic Layer to ensure data integrity.  
+When creating a Review without required fields:
 
-The layered architecture, facade pattern, and repository design operate as intended and maintain a clean separation of concerns.
+Result:
+- Returned 400 Bad Request  
+- Error handled properly instead of exposing internal exceptions  
 
-This document serves as the complete technical reference for Task 6.
+## 6.2 Invalid Foreign Keys
+
+When using a non-existent user_id:
+
+Result:
+- Returned 404 Not Found  
+- Message: "User not found"
+
+When using a non-existent place_id:
+
+Result:
+- Returned 404 Not Found  
+- Message: "Place not found"
+
+## 6.3 Invalid Resource ID
+
+When using a placeholder ID (not a valid UUID):
+
+Result:
+- Returned 404 Not Found  
+
+---
+
+# 7. Architecture Validation
+
+All results matched the intended system design:
+
+- Resource creation → 201  
+- Successful retrieval → 200  
+- Deletion → 204  
+- Missing data → 400  
+- Non-existent resources → 404  
+
+The separation between Presentation, Business Logic, and Persistence layers functioned correctly during all tests.
+
+---
+
+# 8. Final Summary
+
+Task 6 was successfully completed.
+
+- All endpoints were tested.  
+- Success and failure scenarios behaved as expected.  
+- Swagger confirmed proper endpoint registration.  
+- The layered architecture operated correctly.  
+
+This document serves as the official technical record for Task 6.
