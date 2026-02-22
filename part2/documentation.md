@@ -1,269 +1,436 @@
-# HBnB — System Documentation  
+```markdown
+# HBnB — Task 6 Documentation  
 
 ---
 
-# 1. Introduction
+# 1. Overview
 
-The HBnB project is a simplified AirBnB-like platform designed to demonstrate strong software engineering principles, including layered architecture, object-oriented design, and clear separation of concerns.
+Task 6 required testing all API endpoints of the HBnB project and documenting:
 
-This document provides a complete technical blueprint for Task 6. It includes:
+- The final project structure  
+- The exact responsibilities of each team member  
+- All curl commands used during testing  
+- The real behavior of each endpoint  
+- Success and failure cases  
+- Returned HTTP status codes  
+- Swagger usage for API verification  
+- Noting which entities did NOT require DELETE  
 
-- High-level architecture  
-- Layer responsibilities  
-- Domain model overview  
-- API testing for Users, Places, Reviews, and Amenities  
-- Success and failure test cases  
-- Team responsibilities  
-- Final project structure  
-
-This documentation is intended to guide implementation, support maintenance, and serve as a shared technical reference.
-
----
-
-# 2. Team Responsibilities
-
-The HBnB project was developed collaboratively. Each team member was responsible for a specific domain.
-
-| Team Member | Responsibility |
-|-------------|----------------|
-| Maryam | Full responsibility for the Review entity (model and API), and for designing the overall project structure. |
-| Manar | Responsible for the User entity, the Repository layer (persistence/repository.py), and executing all API testing and documentation. |
-| Noura | Responsible for the Place and Amenity entities and their API endpoints. |
+This document reflects the actual implementation and real test results observed during development.
 
 ---
 
-# 3. High-Level Architecture
+# 2. Team Responsibilities (Actual Work Delivered)
 
-HBnB follows a three-layer architecture that improves modularity, maintainability, and testability.
+## Maryam
+- Designed the entire project structure  
+- Created the folder organization:
+  - api/v1  
+  - models  
+  - services  
+  - persistence  
+- Implemented the Review model  
+- Implemented the Review API endpoints  
+- Connected the API layer to the Business Logic layer via the Facade  
+- Ensured Review creation, retrieval, and deletion work correctly  
 
-The layers are:
+## Manar
+- Implemented the User model  
+- Implemented the User API endpoints  
+- Implemented the Repository layer (persistence/repository.py)  
+- Executed all Task 6 API tests  
+- Documented all test results  
+- Identified real runtime errors during testing (KeyError, 404, missing fields)  
 
-- Presentation Layer  
-- Business Logic Layer  
-- Persistence Layer  
-
-Dependencies flow from top to bottom only.
-
----
-
-## 3.1 Presentation Layer
-
-The Presentation Layer is the entry point of the system.
-
-### Responsibilities
-
-- Expose RESTful API endpoints  
-- Handle HTTP requests and responses  
-- Perform basic request validation  
-- Translate client requests into business operations  
-- Return appropriate HTTP status codes  
-
-### Design Rule
-
-This layer contains no business logic.  
-All core processing is delegated to the Business Logic Layer via the facade.
+## Noura
+- Implemented the Place model  
+- Implemented the Amenity model  
+- Implemented the Place API endpoints  
+- Implemented the Amenity API endpoints  
+- Ensured correct integration between Place and Amenity entities  
 
 ---
 
-## 3.2 Business Logic Layer
+# 3. Final Project Structure (Designed by Maryam)
 
-The Business Logic Layer represents the core domain of the application.
-
-### Responsibilities
-
-- Define domain entities (User, Place, Review, Amenity)  
-- Enforce business rules and validations  
-- Coordinate workflows across entities  
-- Act as the single communication point for the Presentation Layer  
-
-### Validation Enforcement
-
-All critical validation rules are enforced inside the Business Logic Layer to guarantee data integrity regardless of the request source.
-
-Examples:
-
-- Review rating must be between 1 and 5  
-- Required fields must be validated before object creation  
-- Related entities must exist before associations are created  
-
-### Facade Pattern
-
-All interactions pass through the facade in services/facade.py, which:
-
-- Simplifies communication  
-- Prevents tight coupling  
-- Centralizes business workflows  
-
----
-
-## 3.3 Persistence Layer
-
-The Persistence Layer is responsible for data storage and retrieval.
-
-### Responsibilities
-
-- Persist domain objects  
-- Retrieve and query data  
-- Abstract database implementation details  
-
-### Design Rule
-
-This layer contains no business logic.  
-It only performs data access operations through the repository.
-
----
-
-# 4. Final Project Structure
-
+```text
 hbnb/
 ├── app/
-│   ├── init.py
+│   ├── __init__.py
 │   ├── api/
-│   │   ├── init.py
+│   │   ├── __init__.py
 │   │   ├── v1/
-│   │   │   ├── init.py
+│   │   │   ├── __init__.py
 │   │   │   ├── users.py
 │   │   │   ├── places.py
 │   │   │   ├── reviews.py
 │   │   │   ├── amenities.py
 │   ├── models/
-│   │   ├── init.py
+│   │   ├── __init__.py
 │   │   ├── user.py
 │   │   ├── place.py
 │   │   ├── review.py
 │   │   ├── amenity.py
 │   ├── services/
-│   │   ├── init.py
+│   │   ├── __init__.py
 │   │   ├── facade.py
 │   ├── persistence/
-│       ├── init.py
+│       ├── __init__.py
 │       ├── repository.py
 ├── run.py
 ├── config.py
 ├── requirements.txt
 ├── README.md
+```
 
 ---
 
-# 5. Domain Model Overview
+# 4. Swagger Usage (Actual Behavior)
 
-The domain model includes four main entities:
+Swagger was used during Task 6 to:
 
-- User  
-- Place  
-- Review  
-- Amenity  
+- Display all available endpoints  
+- Show required request bodies  
+- Show expected responses  
+- Display possible HTTP status codes (200, 201, 400, 404)  
+- Test POST and GET requests quickly  
+- Confirm that routes were properly registered  
 
-Each entity includes:
+Swagger documentation was available at:
 
-- UUID identifier  
-- Audit fields (created_at, updated_at)  
-- Attributes describing its state  
-- Methods describing its behavior The Review entity enforces rating validation within the Business Logic Layer to ensure values remain within the accepted range (1–5).
+```
+http://127.0.0.1:5000/api/v1/docs
+```
+
+Swagger correctly displayed:
+
+- User endpoints  
+- Place endpoints  
+- Review endpoints  
+- Amenity endpoints  
+
+Swagger was used as a live reference while running curl commands to ensure that:
+
+- The endpoints existed  
+- The request body format was correct  
+- The responses matched the design  
 
 ---
 
-# 6. API Testing
+# 5. API Testing (Actual Results With curl)
 
-All tests were executed using curl against:
+All tests were executed against:
 
+```
 http://127.0.0.1:5000/api/v1/
+```
+
+Below are the curl commands and the real behavior observed.
 
 ---
 
-## 6.1 Review API Validation
+# 5.1 USER API (Implemented by Manar)
 
-### 6.1.1 Rating Out of Range
+## 5.1.1 Create User — SUCCESS
 
-curl -X POST http://127.0.0.1:5000/api/v1/reviews/ \
+```bash
+curl -X POST http://127.0.0.1:5000/api/v1/users/ \
 -H "Content-Type: application/json" \
--d '{"user_id":"valid_uuid","place_id":"valid_uuid","comment":"Bad","rating":10}'
+-d '{
+  "first_name": "Manar",
+  "last_name": "Alharbi",
+  "email": "manar@example.com",
+  "password": "123456",
+  "is_admin": true,
+  "is_owner": false
+}'
+```
 
-#### Response
-
-{
-    "message": "Rating must be between 1 and 5"
-}
-
-Rating validation is enforced at the Business Logic Layer level.
+**Result:**  
+- 201 Created  
+- User stored successfully  
 
 ---
 
-## 6.2 Missing Required Fields
+## 5.1.2 Get User — SUCCESS
 
-curl -X POST http://127.0.0.1:5000/api/v1/reviews/ \
+```bash
+curl -X GET http://127.0.0.1:5000/api/v1/users/USER_ID
+```
+
+**Result:**  
+- 200 OK  
+
+---
+
+## 5.1.3 Create User — FAILURE (Missing Fields)
+
+```bash
+curl -X POST http://127.0.0.1:5000/api/v1/users/ \
 -H "Content-Type: application/json" \
--d '{}'
+-d '{"first_name":"Manar"}'
+```
 
-#### Response
-
-{
-    "message": "Missing required fields"
-}
-
-Raw exceptions are not exposed to the client.  
-Errors are handled and returned in a structured JSON format.
+**Result:**  
+- 400 Bad Request  
 
 ---
 
-## 6.3 Amenity API Testing
+## 5.1.4 Note on DELETE for User
 
-### 6.3.1 Create Amenity
+User entity **did NOT require DELETE** in Task 6.
 
+---
+
+# 5.2 PLACE API (Implemented by Noura)
+
+## 5.2.1 Create Place — SUCCESS
+
+```bash
+curl -X POST http://127.0.0.1:5000/api/v1/places/ \
+-H "Content-Type: application/json" \
+-d '{
+  "title": "Manar House",
+  "description": "Nice place",
+  "price": 200
+}'
+```
+
+**Result:**  
+- 201 Created  
+
+---
+
+## 5.2.2 Get Place — SUCCESS
+
+```bash
+curl -X GET http://127.0.0.1:5000/api/v1/places/PLACE_ID
+```
+
+**Result:**  
+- 200 OK  
+
+---
+
+## 5.2.3 Create Place — FAILURE (Missing Fields)
+
+```bash
+curl -X POST http://127.0.0.1:5000/api/v1/places/ \
+-H "Content-Type: application/json" \
+-d '{"title":"Only Title"}'
+```
+
+**Result:**  
+- 400 Bad Request  
+
+---
+
+## 5.2.4 Note on DELETE for Place
+
+Place entity **did NOT require DELETE** in Task 6.
+
+---
+
+# 5.3 AMENITY API (Implemented by Noura)
+
+## 5.3.1 Create Amenity — SUCCESS
+
+```bash
 curl -X POST http://127.0.0.1:5000/api/v1/amenities/ \
 -H "Content-Type: application/json" \
 -d '{"name":"WiFi"}'
+```
 
-#### Response
-
-{
-    "id": "995359bd-1e8f-411d-af56-7441f35b1f5e",
-    "name": "WiFi",
-    "description": ""
-}
+**Result:**  
+- 201 Created  
 
 ---
 
-### 6.3.2 Get Amenity
+## 5.3.2 Get Amenity — SUCCESS
 
-curl -X GET http://127.0.0.1:5000/api/v1/amenities/995359bd-1e8f-411d-af56-7441f35b1f5e
+```bash
+curl -X GET http://127.0.0.1:5000/api/v1/amenities/AMENITY_ID
+```
 
-#### Response
-
-{
-    "id": "995359bd-1e8f-411d-af56-7441f35b1f5e",
-    "name": "WiFi",
-    "description": ""
-}
-
-DELETE operation is not implemented for amenities in Part 2 as per project requirements.
+**Result:**  
+- 200 OK  
 
 ---
 
-# 7. API Documentation (Swagger)
+## 5.3.3 Delete Amenity — SUCCESS  
+(Not required but implemented)
 
-The HBnB project includes built-in API documentation using Swagger UI.
+```bash
+curl -X DELETE http://127.0.0.1:5000/api/v1/amenities/AMENITY_ID
+```
 
-Swagger operates entirely within the Presentation Layer and does not contain business logic.
-
-It allows developers to:
-
-- Explore all endpoints  
-- View request/response schemas  
-- Test API calls directly from the browser  
-- Validate request formats  
-
-Swagger is available at:
-
-http://127.0.0.1:5000/api/v1/docs
+**Result:**  
+- 204 No Content  
 
 ---
 
-# 8. Conclusion
+## 5.3.4 Get Amenity After Deletion — FAILURE
 
-All API endpoints for Users, Places, Reviews, and Amenities were tested successfully.  
+```bash
+curl -X GET http://127.0.0.1:5000/api/v1/amenities/AMENITY_ID
+```
 
-Business rules such as rating validation and required field checks are enforced within the Business Logic Layer to ensure data integrity.  
+**Result:**  
+- 404 Not Found  
 
-The layered architecture, facade pattern, and repository design operate as intended and maintain a clean separation of concerns.
+---
 
+## 5.3.5 Invalid Amenity ID — FAILURE
+
+```bash
+curl -X GET http://127.0.0.1:5000/api/v1/amenities/INVALID_ID
+```
+
+**Result:**  
+- 404 Not Found  
+
+---
+
+# 5.4 REVIEW API (Implemented by Maryam)
+
+## 5.4.1 Create Review — SUCCESS
+
+```bash
+curl -X POST http://127.0.0.1:5000/api/v1/reviews/ \
+-H "Content-Type: application/json" \
+-d '{
+  "user_id": "VALID_USER_ID",
+  "place_id": "VALID_PLACE_ID",
+  "comment": "Amazing place!",
+  "rating": 5
+}'
+```
+
+**Result:**  
+- 201 Created  
+
+---
+
+## 5.4.2 Create Review — FAILURE (Missing Fields)
+
+```bash
+curl -X POST http://127.0.0.1:5000/api/v1/reviews/ \
+-H "Content-Type: application/json" \
+-d '{}'
+```
+
+**Result:**  
+- 400 Bad Request  
+- KeyError: 'user_id'  
+
+---
+
+## 5.4.3 Create Review — FAILURE (Invalid user_id)
+
+```bash
+curl -X POST http://127.0.0.1:5000/api/v1/reviews/ \
+-H "Content-Type: application/json" \
+-d '{
+  "user_id": "999",
+  "place_id": "VALID_PLACE_ID",
+  "comment": "Test",
+  "rating": 4
+}'
+```
+
+**Result:**  
+- 404 Not Found  
+- "User not found"  
+
+---
+
+## 5.4.4 Create Review — FAILURE (Invalid place_id)
+
+```bash
+curl -X POST http://127.0.0.1:5000/api/v1/reviews/ \
+-H "Content-Type: application/json" \
+-d '{
+  "user_id": "VALID_USER_ID",
+  "place_id": "999",
+  "comment": "Test",
+  "rating": 4
+}'
+```
+
+**Result:**  
+- 404 Not Found  
+- "Place not found"  
+
+---
+
+## 5.4.5 Get Review — SUCCESS
+
+```bash
+curl -X GET http://127.0.0.1:5000/api/v1/reviews/REVIEW_ID
+```
+
+**Result:**  
+- 200 OK  
+
+---
+
+## 5.4.6 Delete Review — SUCCESS
+
+```bash
+curl -X DELETE http://127.0.0.1:5000/api/v1/reviews/REVIEW_ID
+```
+
+**Result:**  
+- 204 No Content  
+
+---
+
+## 5.4.7 Get Review After Deletion — FAILURE
+
+```bash
+curl -X GET http://127.0.0.1:5000/api/v1/reviews/REVIEW_ID
+```
+
+**Result:**  
+- 404 Not Found  
+- "Review not found"  
+
+---
+
+# 6. Error Handling and HTTP Status Codes (Based on Real Results)
+
+- 200 OK → Successful GET  
+- 201 Created → Successful POST  
+- 204 No Content → Successful DELETE  
+- 400 Bad Request → Missing or invalid request body  
+- 404 Not Found → Non-existent resource or invalid foreign key  
+
+---
+
+# 7. Architecture Validation (From Task 6 Behavior)
+
+| Scenario                    | Expected | Actual | Matches |
+|----------------------------|----------|--------|---------|
+| Create resource            | 201      | 201    | Yes     |
+| Get existing resource      | 200      | 200    | Yes     |
+| Delete resource            | 204      | 204    | Yes     |
+| Missing required fields    | 400      | 400    | Yes     |
+| Non-existent resource ID   | 404      | 404    | Yes     |
+| Invalid foreign key        | 404      | 404    | Yes     |
+
+---
+
+# 8. Final Summary
+
+- All endpoints were tested using curl  
+- Swagger was used to verify endpoint definitions and request/response formats  
+- Success and failure scenarios behaved as expected  
+- Some entities (User, Place) did not require DELETE  
+- Review and Amenity DELETE operations were implemented and tested  
+- Documentation includes every curl command and outcome observed in Task 6  
+
+This document serves as the official technical record for Task 6.
+```
+
+-----------------------------------------
+-----------------------------------------
