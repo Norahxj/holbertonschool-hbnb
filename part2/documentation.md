@@ -21,7 +21,7 @@ This document reflects the actual implementation and real test results observed 
 
 # 2. Team Responsibilities (Actual Work Delivered)
 
-## Maryam
+## Mariam
 - Designed the entire project structure  
 - Created the folder organization:
   - api/v1  
@@ -41,7 +41,7 @@ This document reflects the actual implementation and real test results observed 
 - Documented all test results  
 - Identified real runtime errors during testing (KeyError, 404, missing fields)  
 
-## Noura
+## Norah
 - Implemented the Place model  
 - Implemented the Amenity model  
 - Implemented the Place API endpoints  
@@ -50,7 +50,7 @@ This document reflects the actual implementation and real test results observed 
 
 ---
 
-# 3. Final Project Structure (Designed by Maryam)
+# 3. Final Project Structure (Designed by Mariam)
 
 ```text
 hbnb/
@@ -430,6 +430,3 @@ curl -X GET http://127.0.0.1:5000/api/v1/reviews/REVIEW_ID
 
 This document serves as the official technical record for Task 6.
 ```
-
------------------------------------------
------------------------------------------
