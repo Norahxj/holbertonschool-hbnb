@@ -1,224 +1,246 @@
-# HBnB — Task 6 Documentation  
+1. Overview
 
----
+The final project structure
 
-# 1. Overview
+The exact responsibilities of each team member
 
-Task 6 required testing all API endpoints of the HBnB project and documenting:
+The real behavior of each endpoint during testing
 
-- The final project structure  
-- The exact responsibilities of each team member  
-- The real behavior of each endpoint during testing  
-- Success and failure cases  
-- Returned HTTP status codes  
-- Swagger usage for API verification  
+All curl commands used
 
-This document reflects the actual implementation and real test results observed during development.
+Success and failure cases
 
----
+Returned HTTP status codes
 
-# 2. Team Responsibilities (Actual Work Delivered)
+Swagger usage for API verification
 
-## Maryam
-- Designed the complete project structure  
-- Created the folder organization:
-  - api/v1  
-  - models  
-  - services  
-  - persistence  
-- Implemented the Review model  
-- Implemented the Review API endpoints  
-- Ensured proper integration between layers  
-- Connected the API layer to the Business Logic layer via the Facade  
+This document reflects the actual implementation and the real test results observed during development.
 
-## Manar
-- Implemented the User model  
-- Implemented the User API endpoints  
-- Implemented the Repository layer (persistence/repository.py)  
-- Executed all Task 6 API tests  
-- Documented all test results  
-- Identified real runtime errors during testing (e.g., KeyError and 404 cases)  
+2. Team Responsibilities (Actual Work Delivered)
+Maryam
+Designed the entire project structure
 
-## Noura
-- Implemented the Place model  
-- Implemented the Amenity model  
-- Implemented the Place API endpoints  
-- Implemented the Amenity API endpoints  
-- Ensured correct integration between Place and Amenity entities  
+Created the folder organization:
 
----
+api/v1
 
-# 3. Final Project Structure (Designed by Maryam)
+models
 
+services
+
+persistence
+
+Implemented the Review model
+
+Implemented the Review API endpoints
+
+Connected the API layer to the Business Logic layer via the Facade
+
+Ensured that Review creation, deletion, and retrieval work correctly
+
+Manar
+Implemented the User model
+
+Implemented the User API endpoints
+
+Implemented the Repository layer (persistence/repository.py)
+
+Executed all Task 6 API tests
+
+Documented all test results
+
+Identified real runtime errors during testing (KeyError, 404, missing fields)
+
+Noura
+Implemented the Place model
+
+Implemented the Amenity model
+
+Implemented the Place API endpoints
+
+Implemented the Amenity API endpoints
+
+Ensured correct integration between Place and Amenity entities
+
+3. Final Project Structure (Designed by Maryam)
+كتابة تعليمات برمجية
 hbnb/
 ├── app/
-│   ├── init.py
+│   ├── __init__.py
 │   ├── api/
-│   │   ├── init.py
+│   │   ├── __init__.py
 │   │   ├── v1/
-│   │   │   ├── init.py
+│   │   │   ├── __init__.py
 │   │   │   ├── users.py
 │   │   │   ├── places.py
 │   │   │   ├── reviews.py
 │   │   │   ├── amenities.py
 │   ├── models/
-│   │   ├── init.py
+│   │   ├── __init__.py
 │   │   ├── user.py
 │   │   ├── place.py
 │   │   ├── review.py
 │   │   ├── amenity.py
 │   ├── services/
-│   │   ├── init.py
+│   │   ├── __init__.py
 │   │   ├── facade.py
 │   ├── persistence/
-│       ├── init.py
+│       ├── __init__.py
 │       ├── repository.py
 ├── run.py
 ├── config.py
 ├── requirements.txt
 ├── README.md
+4. Swagger Usage (Actual Behavior)
+Swagger was used during Task 6 to:
 
-The architecture follows a clear layered design:
+Display all available endpoints
 
-- Presentation Layer → api/
-- Business Logic Layer → models/ and services/
-- Persistence Layer → persistence/
+Show required request bodies
 
-Each layer has a single responsibility and communicates only with the layer directly below it.
+Show expected responses
 
----
+Display possible HTTP status codes (200, 201, 400, 404)
 
-# 4. Swagger Usage (Actual Behavior)
+Test POST and GET requests quickly
 
-During Task 6, Swagger was used to:
-
-- Display all available endpoints  
-- Show required request bodies  
-- Show expected responses  
-- Display possible HTTP status codes (200, 201, 400, 404)  
-- Test POST and GET requests quickly  
-- Confirm that routes were properly registered  
+Confirm that routes were properly registered
 
 Swagger documentation was available at:
 
+كتابة تعليمات برمجية
 /api/v1/docs
+Swagger correctly displayed:
 
-It correctly displayed:
+User endpoints
 
-- User endpoints  
-- Place endpoints  
-- Review endpoints  
-- Amenity endpoints  
+Place endpoints
 
----
+Review endpoints
 
-# 5. API Testing (Actual Results)
+Amenity endpoints
 
-## 5.1 User API (Implemented by Manar)
-
-### Create User (Success)
-
+5. API Testing (Actual Results With curl)
+5.1 User API (Implemented by Manar)
+Create User — SUCCESS
+كتابة تعليمات برمجية
+curl -X POST http://127.0.0.1:5000/api/v1/users/ \
+-H "Content-Type: application/json" \
+-d '{"first_name":"Manar","last_name":"Alharbi","email":"manar@example.com","password":"123456","is_admin":true,"is_owner":false}'
 Result:
-- Returned 201 Created  
-- User was successfully stored  
-- UUID was generated automatically  
 
----
+Returned 201 Created
 
-## 5.2 Place API (Implemented by Noura)
+User stored successfully
 
-### Create Place (Success)
+UUID generated automatically
 
+5.2 Place API (Implemented by Noura)
+Create Place — SUCCESS
+كتابة تعليمات برمجية
+curl -X POST http://127.0.0.1:5000/api/v1/places/ \
+-H "Content-Type: application/json" \
+-d '{"title":"Manar House","description":"Nice place","price":200}'
 Result:
-- Returned 201 Created  
-- Place was successfully stored  
-- Owner field remained null (not linked to a user)
 
----
+Returned 201 Created
 
-## 5.3 Review API (Implemented by Maryam)
+Place stored successfully
 
-### Create Review (Success)
+owner remained null
 
+5.3 Review API (Implemented by Maryam)
+Create Review — SUCCESS
+كتابة تعليمات برمجية
+curl -X POST http://127.0.0.1:5000/api/v1/reviews/ \
+-H "Content-Type: application/json" \
+-d '{"user_id":"VALID_USER_ID","place_id":"VALID_PLACE_ID","comment":"Amazing place!","rating":5}'
 Result:
-- Returned 201 Created  
-- Review was successfully created  
-- Foreign keys were validated  
 
-### Get Review (Success)
+Returned 201 Created
 
+Review created successfully
+
+Get Review — SUCCESS
+كتابة تعليمات برمجية
+curl -X GET http://127.0.0.1:5000/api/v1/reviews/REVIEW_ID
 Result:
-- Returned 200 OK  
-- Data retrieved correctly  
 
-### Delete Review (Success)
+Returned 200 OK
 
+Review data retrieved
+
+Delete Review — SUCCESS
+كتابة تعليمات برمجية
+curl -X DELETE http://127.0.0.1:5000/api/v1/reviews/REVIEW_ID
 Result:
-- Returned 204 No Content  
-- Review was successfully deleted  
 
-### Get Review After Deletion (Failure)
+Returned 204 No Content
 
+Review deleted
+
+Get Review After Deletion — FAILURE
+كتابة تعليمات برمجية
+curl -X GET http://127.0.0.1:5000/api/v1/reviews/REVIEW_ID
 Result:
-- Returned 404 Not Found  
-- Message: "Review not found"
 
----
+Returned 404 Not Found
 
-# 6. Error Cases Encountered During Testing
+Message: "Review not found"
 
-## 6.1 Missing Required Fields
-
+6. Error Cases Encountered During Testing
+6.1 Missing Required Fields → 400 Bad Request
 When creating a Review without required fields:
 
+كتابة تعليمات برمجية
+curl -X POST http://127.0.0.1:5000/api/v1/reviews/ \
+-H "Content-Type: application/json" \
+-d '{}'
+Actual Result:
+
+Returned 400 Bad Request
+
+Error: KeyError: 'user_id'
+
+6.2 Invalid Foreign Keys → 404 Not Found
+Invalid user_id
+كتابة تعليمات برمجية
+{
+  "message": "User not found"
+}
+Invalid place_id
+كتابة تعليمات برمجية
+{
+  "message": "Place not found"
+}
+6.3 Invalid Resource ID → 404 Not Found
+Using placeholder ID:
+
+كتابة تعليمات برمجية
+/amenities/AMENITY_ID
 Result:
-- Returned 400 Bad Request  
-- Error handled properly instead of exposing internal exceptions  
 
-## 6.2 Invalid Foreign Keys
+Returned 404 Not Found
 
-When using a non-existent user_id:
+7. Architecture Validation (Based on Real Results)
+Scenario	Expected	Actual	Matches Design
+Create resource	201	201	Yes
+Get existing resource	200	200	Yes
+Delete resource	204	204	Yes
+Missing fields	400	400	Yes
+Non-existent resource	404	404	Yes
+Invalid foreign key	404	404	Yes
+All results matched the intended system design.
 
-Result:
-- Returned 404 Not Found  
-- Message: "User not found"
-
-When using a non-existent place_id:
-
-Result:
-- Returned 404 Not Found  
-- Message: "Place not found"
-
-## 6.3 Invalid Resource ID
-
-When using a placeholder ID (not a valid UUID):
-
-Result:
-- Returned 404 Not Found  
-
----
-
-# 7. Architecture Validation
-
-All results matched the intended system design:
-
-- Resource creation → 201  
-- Successful retrieval → 200  
-- Deletion → 204  
-- Missing data → 400  
-- Non-existent resources → 404  
-
-The separation between Presentation, Business Logic, and Persistence layers functioned correctly during all tests.
-
----
-
-# 8. Final Summary
-
+8. Final Summary
 Task 6 was successfully completed.
 
-- All endpoints were tested.  
-- Success and failure scenarios behaved as expected.  
-- Swagger confirmed proper endpoint registration.  
-- The layered architecture operated correctly.  
+All endpoints were tested using curl.
 
-This document serves as the official technical record for Task 6.
+Success and failure scenarios behaved exactly as expected.
+
+Swagger confirmed proper endpoint registration.
+
+The layered architecture worked correctly.
+
+Each team member delivered their assigned components.
