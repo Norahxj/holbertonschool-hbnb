@@ -1,4 +1,3 @@
-```markdown
 # HBnB — Task 6 Documentation  
 
 ---
