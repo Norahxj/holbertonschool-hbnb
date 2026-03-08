@@ -1,66 +1,100 @@
 from flask_restx import Namespace, Resource, fields
-from app.models.user import User
-from app.persistence.repository import storage
+from app.services import facade
+import re
 
-api = Namespace("users", description="Users operations")
+api = Namespace('users', description='User operations')
 
-user_model = api.model("User", {
-    "id": fields.String(readonly=True),
-    "first_name": fields.String(required=True),
-    "last_name": fields.String(required=True),
-    "email": fields.String(required=True),
-    "password": fields.String(required=True),
-    "is_admin": fields.Boolean(default=False),
-    "is_owner": fields.Boolean(default=False)
+
+def is_valid_email(email):
+    pattern = r'^[^@]+@[^@]+\.[^@]+'
+    return re.match(pattern, email)
+
+
+user_model = api.model('User', {
+    'first_name': fields.String(required=True),
+    'last_name': fields.String(required=True),
+    'email': fields.String(required=True)
 })
 
-@api.route("/")
-class UsersList(Resource):
-    @api.marshal_list_with(user_model)
+
+@api.route('/')
+class UserList(Resource):
+
+    @api.expect(user_model, validate=True)
+    def post(self):
+        """Create user"""
+
+        user_data = api.payload
+
+        if not is_valid_email(user_data['email']):
+            return {'error': 'Invalid email format'}, 400
+
+        existing_user = facade.get_user_by_email(user_data['email'])
+        if existing_user:
+            return {'error': 'Email already registered'}, 400
+
+        user = facade.create_user(user_data)
+
+        return {
+            'id': user.id,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email
+        }, 201
+
+
     def get(self):
-        return [u.to_dict() for u in storage.all_users()]
+        """Get all users"""
+
+        users = facade.get_all_users()
+
+        return [
+            {
+                'id': u.id,
+                'first_name': u.first_name,
+                'last_name': u.last_name,
+                'email': u.email
+            }
+            for u in users
+        ], 200
+
+
+@api.route('/<user_id>')
+class UserResource(Resource):
+
+    def get(self, user_id):
+        """Get user by ID"""
+
+        user = facade.get_user(user_id)
+
+        if not user:
+            return {'error': 'User not found'}, 404
+
+        return {
+            'id': user.id,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email
+        }, 200
+
 
     @api.expect(user_model)
-    @api.marshal_with(user_model, code=201)
-    def post(self):
+    def put(self, user_id):
+        """Update user"""
+
         data = api.payload
 
-        # Create user
-        user = User(
-            first_name=data["first_name"],
-            last_name=data["last_name"],
-            email=data["email"],
-            password=data["password"],
-            is_admin=data.get("is_admin", False),
-            is_owner=data.get("is_owner", False)
-        )
+        if 'email' in data and not is_valid_email(data['email']):
+            return {'error': 'Invalid email format'}, 400
 
-        storage.save_user(user)
-        return user.to_dict(), 201
+        user = facade.update_user(user_id, data)
 
-
-@api.route("/<string:user_id>")
-class UserItem(Resource):
-    @api.marshal_with(user_model)
-    def get(self, user_id):
-        user = storage.get_user(user_id)
         if not user:
-            api.abort(404, "User not found")
-        return user.to_dict()
+            return {'error': 'User not found'}, 404
 
-    def delete(self, user_id):
-        # Only admin can delete
-        users = storage.all_users()
-        if not users:
-            api.abort(404, "No users found")
-
-        current_user = users[0]  # simulate logged-in user
-
-        if not current_user.is_admin:
-            api.abort(403, "Admins only")
-
-        deleted = storage.delete_user(user_id)
-        if not deleted:
-            api.abort(404, "User not found")
-
-        return {"message": "User deleted"}
+        return {
+            'id': user.id,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email
+        }, 200

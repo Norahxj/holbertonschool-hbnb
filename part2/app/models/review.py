@@ -1,26 +1,28 @@
+from app.models.base_model import BaseModel
 from app.models.place import Place
 from app.models.user import User
-from app.models.base_model import BaseModel
+
 
 class Review(BaseModel):
-    def __init__(self, user_id, place_id, comment, rating):
+    def __init__(self, text, rating, place, user):
         super().__init__()
-        self.user_id = user_id
-        self.place_id = place_id
-        self.comment = comment
+
+        if not text:
+            raise ValueError("Review text is required")
+
+        if not (1 <= rating <= 5):
+            raise ValueError("rating must be between 1 and 5")
+
+        if not isinstance(place, Place):
+            raise ValueError("place must be a Place instance")
+
+        if not isinstance(user, User):
+            raise ValueError("user must be a User instance")
+
+        self.text = text
         self.rating = rating
+        self.place = place
+        self.user = user
 
-    def save(self):
-        super().save()
-
-    def to_dict(self):
-        base_dict = super().to_dict()
-        base_dict.update({
-            'user_id': self.user_id,
-            'place_id': self.place_id,
-            'comment': self.comment,
-            'rating': self.rating,
-            'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat(),
-        })
-        return base_dict
+        # Link review to place
+        place.add_review(self)

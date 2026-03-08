@@ -4,8 +4,8 @@ from app.models.amenity import Amenity
 
 
 class Place(BaseModel):
-    def init(self, title, description, price, latitude, longitude, owner):
-        super().init()
+    def __init__(self, title, description, price, latitude, longitude, owner):
+        super().__init__()
 
         if not title or len(title) > 100:
             raise ValueError("title is required and must be <= 100 characters")
