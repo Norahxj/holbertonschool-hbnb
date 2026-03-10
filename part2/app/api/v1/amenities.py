@@ -1,47 +1,77 @@
 from flask_restx import Namespace, Resource, fields
-from app.models.amenity import Amenity
-from app.persistence.repository import storage
+from app.services import facade
 
-api = Namespace("amenities", description="Amenities operations")
+api = Namespace('amenities', description='Amenity operations')
 
-amenity_model = api.model("Amenity", {
-    "id": fields.String(readonly=True),
-    "name": fields.String(required=True),
-    "description": fields.String(default="")
+
+amenity_model = api.model('Amenity', {
+    'name': fields.String(required=True, description='Name of the amenity')
 })
 
 
-@api.route("/")
-class AmenitiesList(Resource):
-    @api.marshal_list_with(amenity_model)
-    def get(self):
-        return [a.to_dict() for a in storage.all_amenities()]
+@api.route('/')
+class AmenityList(Resource):
 
     @api.expect(amenity_model)
-    @api.marshal_with(amenity_model, code=201)
     def post(self):
+        """Register a new amenity"""
+
+        amenity_data = api.payload
+
+        if not amenity_data.get('name'):
+            return {'error': 'Invalid input data'}, 400
+
+        amenity = facade.create_amenity(amenity_data)
+
+        return {
+            'id': amenity.id,
+            'name': amenity.name
+        }, 201
+
+
+    def get(self):
+        """Retrieve all amenities"""
+
+        amenities = facade.get_all_amenities()
+
+        return [
+            {
+                'id': a.id,
+                'name': a.name
+            }
+            for a in amenities
+        ], 200
+
+
+@api.route('/<amenity_id>')
+class AmenityResource(Resource):
+
+    def get(self, amenity_id):
+        """Get amenity by ID"""
+
+        amenity = facade.get_amenity(amenity_id)
+
+        if not amenity:
+            return {'error': 'Amenity not found'}, 404
+
+        return {
+            'id': amenity.id,
+            'name': amenity.name
+        }, 200
+
+
+    @api.expect(amenity_model)
+    def put(self, amenity_id):
+        """Update amenity"""
+
         data = api.payload
 
-        amenity = Amenity(
-            name=data["name"],
-            description=data.get("description", "")
-        )
+        if not data.get('name'):
+            return {'error': 'Invalid input data'}, 400
 
-        storage.save_amenity(amenity)
-        return amenity.to_dict(), 201
+        amenity = facade.update_amenity(amenity_id, data)
 
-
-@api.route("/<amenity_id>")
-class AmenityItem(Resource):
-    @api.marshal_with(amenity_model)
-    def get(self, amenity_id):
-        amenity = storage.get_amenity(amenity_id)
         if not amenity:
-            api.abort(404, "Amenity not found")
-        return amenity.to_dict()
+            return {'error': 'Amenity not found'}, 404
 
-    def delete(self, amenity_id):
-        deleted = storage.delete_amenity(amenity_id)
-        if not deleted:
-            api.abort(404, "Amenity not found")
-        return {"message": "Amenity deleted"}
+        return {'message': 'Amenity updated successfully'}, 200
