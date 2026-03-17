@@ -29,3 +29,7 @@ class InMemoryRepository:
             if getattr(obj, attr) == value:
                 return obj
         return None
+
+    def delete(self, obj_id):
+        if obj_id in self.storage:
+            del self.storage[obj_id]

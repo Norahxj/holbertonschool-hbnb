@@ -1,58 +1,92 @@
 from flask_restx import Namespace, Resource, fields
-from app.persistence.repository import storage
-from app.models.review import Review
+from flask import request
+from app.services import facade
 
-api = Namespace("reviews", description="Reviews operations")
+api = Namespace('reviews', description='Review operations')
 
-review_model = api.model("Review", {
-    "id": fields.String(readonly=True),
-    "user_id": fields.String(required=True),
-    "place_id": fields.String(required=True),
-    "comment": fields.String(required=True),
-    "rating": fields.Integer(required=True, min=1, max=5)
+review_model = api.model('Review', {
+    'text': fields.String(required=True),
+    'rating': fields.Integer(required=True),
+    'user_id': fields.String(required=True),
+    'place_id': fields.String(required=True)
 })
 
-@api.route("/")
+@api.route('/')
 class ReviewList(Resource):
-    @api.marshal_list_with(review_model)
-    def get(self):
-        return storage.all_reviews()
 
     @api.expect(review_model)
-    @api.marshal_with(review_model, code=201)
     def post(self):
-        data = api.payload
 
-        # validation
-        if not storage.get_user(data["user_id"]):
-            api.abort(404, "User not found")
+        review_data = request.json
 
-        if not storage.get_place(data["place_id"]):
-            api.abort(404, "Place not found")
+        try:
+            review = facade.create_review(review_data)
 
-        review = Review(
-            user_id=data["user_id"],
-            place_id=data["place_id"],
-            comment=data["comment"],
-            rating=data["rating"]
-        )
+            return {
+                "id": review.id,
+                "text": review.text,
+                "rating": review.rating,
+                "user_id": review.user.id,
+                "place_id": review.place.id
+            }, 201
 
-        storage.save_review(review)
-        return review, 201
+        except ValueError as e:
+            return {"error": str(e)}, 400
 
 
-@api.route("/<string:review_id>")
-class ReviewItem(Resource):
-    @api.marshal_with(review_model)
+    def get(self):
+
+        reviews = facade.get_all_reviews()
+
+        return [
+            {
+                "id": r.id,
+                "text": r.text,
+                "rating": r.rating
+            } for r in reviews
+        ], 200
+
+
+@api.route('/<review_id>')
+class ReviewResource(Resource):
+
     def get(self, review_id):
-        review = storage.get_review(review_id)
+
+        review = facade.get_review(review_id)
+
         if not review:
-            api.abort(404, "Review not found")
-        return review
+            return {"error": "Review not found"}, 404
+
+        return {
+            "id": review.id,
+            "text": review.text,
+            "rating": review.rating,
+            "user_id": review.user.id,
+            "place_id": review.place.id
+        }, 200
+
+
+    def put(self, review_id):
+
+        review_data = request.json
+
+        try:
+            review = facade.update_review(review_id, review_data)
+
+            if not review:
+                return {"error": "Review not found"}, 404
+
+            return {"message": "Review updated successfully"}, 200
+
+        except ValueError as e:
+            return {"error": str(e)}, 400
+
 
     def delete(self, review_id):
-        review = storage.get_review(review_id)
-        if not review:
-            api.abort(404, "Review not found")
-        storage.delete_review(review_id)
-        return "", 204
+
+        deleted = facade.delete_review(review_id)
+
+        if not deleted:
+            return {"error": "Review not found"}, 404
+
+        return {"message": "Review deleted successfully"}, 200
