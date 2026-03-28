@@ -6,14 +6,23 @@ api = Namespace('users', description='User operations')
 
 
 def is_valid_email(email):
-    pattern = r'^[^@]+@[^@]+\.[^@]+'
+    pattern = r'^[^@]+@[^@]+\.[^@]+$'
     return re.match(pattern, email)
 
 
 user_model = api.model('User', {
     'first_name': fields.String(required=True),
     'last_name': fields.String(required=True),
-    'email': fields.String(required=True)
+    'email': fields.String(required=True),
+    'password': fields.String(required=True)
+})
+
+
+update_user_model = api.model('UpdateUser', {
+    'first_name': fields.String(required=False),
+    'last_name': fields.String(required=False),
+    'email': fields.String(required=False),
+    'password': fields.String(required=False)
 })
 
 
@@ -37,11 +46,8 @@ class UserList(Resource):
 
         return {
             'id': user.id,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'email': user.email
+            'message': 'User registered successfully'
         }, 201
-
 
     def get(self):
         """Get all users"""
@@ -77,8 +83,7 @@ class UserResource(Resource):
             'email': user.email
         }, 200
 
-
-    @api.expect(user_model)
+    @api.expect(update_user_model, validate=True)
     def put(self, user_id):
         """Update user"""
 
