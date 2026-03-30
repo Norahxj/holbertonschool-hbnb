@@ -1,4 +1,5 @@
 from flask_restx import Namespace, Resource, fields
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services import facade
 import re
 
@@ -32,7 +33,6 @@ class UserList(Resource):
     @api.expect(user_model, validate=True)
     def post(self):
         """Create user"""
-
         user_data = api.payload
 
         if not is_valid_email(user_data['email']):
@@ -51,7 +51,6 @@ class UserList(Resource):
 
     def get(self):
         """Get all users"""
-
         users = facade.get_all_users()
 
         return [
@@ -70,7 +69,6 @@ class UserResource(Resource):
 
     def get(self, user_id):
         """Get user by ID"""
-
         user = facade.get_user(user_id)
 
         if not user:
@@ -83,14 +81,18 @@ class UserResource(Resource):
             'email': user.email
         }, 200
 
+    @jwt_required()
     @api.expect(update_user_model, validate=True)
     def put(self, user_id):
         """Update user"""
-
+        current_user = get_jwt_identity()
         data = api.payload
 
-        if 'email' in data and not is_valid_email(data['email']):
-            return {'error': 'Invalid email format'}, 400
+        if current_user != user_id:
+            return {'error': 'Unauthorized action'}, 403
+
+        if 'email' in data or 'password' in data:
+            return {'error': 'You cannot modify email or password'}, 400
 
         user = facade.update_user(user_id, data)
 

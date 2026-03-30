@@ -4,6 +4,7 @@ from app.models.amenity import Amenity
 from app.models.place import Place
 from app.models.review import Review
 
+
 class HBnBFacade:
 
     def __init__(self):
@@ -36,11 +37,11 @@ class HBnBFacade:
             data = data.copy()
             del data["password"]
 
-            for key, value in data.items():
-                setattr(user, key, value)
+        for key, value in data.items():
+            setattr(user, key, value)
 
-                user.touch()
-                return user
+        user.touch()
+        return user
 
     def get_user_by_email(self, email):
         return self.user_repo.get_by_attribute('email', email)
@@ -65,12 +66,10 @@ class HBnBFacade:
 
     def create_place(self, place_data):
 
-        # validate owner
         owner = self.get_user(place_data["owner_id"])
         if not owner:
             raise ValueError("Owner not found")
 
-        # validate amenities
         amenities = []
         for amenity_id in place_data.get("amenities", []):
             amenity = self.get_amenity(amenity_id)
@@ -78,7 +77,6 @@ class HBnBFacade:
                 raise ValueError(f"Amenity {amenity_id} not found")
             amenities.append(amenity)
 
-        # create place
         place = Place(
             title=place_data["title"],
             description=place_data.get("description"),
@@ -88,23 +86,17 @@ class HBnBFacade:
             owner=owner
         )
 
-        # attach amenities
         place.amenities = amenities
-
-        # store
         self.place_repo.add(place)
 
         return place
 
-    # Retrieve a place by ID
     def get_place(self, place_id):
         return self.place_repo.get(place_id)
 
-    # Retrieve all places
     def get_all_places(self):
         return self.place_repo.get_all()
 
-    # Update a place
     def update_place(self, place_id, place_data):
 
         place = self.get_place(place_id)
@@ -117,7 +109,6 @@ class HBnBFacade:
                 owner = self.get_user(value)
                 if not owner:
                     raise ValueError("Owner not found")
-
                 place.owner = owner
 
             elif key == "amenities":
@@ -133,6 +124,7 @@ class HBnBFacade:
             else:
                 setattr(place, key, value)
 
+        place.touch()
         return place
 
     # ----------------- REVIEWS -----------------
@@ -151,11 +143,11 @@ class HBnBFacade:
             raise ValueError("Rating must be between 1 and 5")
 
         review = Review(
-                text=review_data["text"],
-                rating=review_data["rating"],
-                user=user,
-                place=place
-                )
+            text=review_data["text"],
+            rating=review_data["rating"],
+            user=user,
+            place=place
+        )
 
         self.review_repo.add(review)
         place.add_review(review)
@@ -169,7 +161,6 @@ class HBnBFacade:
         return self.review_repo.get_all()
 
     def get_reviews_by_place(self, place_id):
-
         place = self.get_place(place_id)
 
         if not place:
@@ -188,15 +179,14 @@ class HBnBFacade:
                 raise ValueError("text cannot be empty")
             review.text = review_data["text"]
 
-            if "rating" in review_data:
-                rating = review_data["rating"]
-                if rating < 1 or rating > 5:
-                    raise ValueError("rating must be between 1 and 5")
-                review.rating = rating
+        if "rating" in review_data:
+            rating = review_data["rating"]
+            if rating < 1 or rating > 5:
+                raise ValueError("rating must be between 1 and 5")
+            review.rating = rating
 
-                review.touch()
-
-                return review
+        review.touch()
+        return review
 
     def delete_review(self, review_id):
 
