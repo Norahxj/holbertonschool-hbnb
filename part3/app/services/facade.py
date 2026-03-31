@@ -13,6 +13,15 @@ class HBnBFacade:
         self.place_repo = InMemoryRepository()
         self.review_repo = InMemoryRepository()
 
+        admin_user = User(
+            first_name="Admin",
+            last_name="User",
+            email="admin@hbnb.io",
+            password="admin1234",
+            is_admin=True
+        )
+        self.user_repo.add(admin_user)
+
     # ---------------- USERS ----------------
 
     def create_user(self, user_data):
@@ -65,7 +74,6 @@ class HBnBFacade:
     # ---------------- PLACES ----------------
 
     def create_place(self, place_data):
-
         owner = self.get_user(place_data["owner_id"])
         if not owner:
             raise ValueError("Owner not found")
@@ -88,7 +96,6 @@ class HBnBFacade:
 
         place.amenities = amenities
         self.place_repo.add(place)
-
         return place
 
     def get_place(self, place_id):
@@ -98,13 +105,11 @@ class HBnBFacade:
         return self.place_repo.get_all()
 
     def update_place(self, place_id, place_data):
-
         place = self.get_place(place_id)
         if not place:
             return None
 
         for key, value in place_data.items():
-
             if key == "owner_id":
                 owner = self.get_user(value)
                 if not owner:
@@ -118,7 +123,6 @@ class HBnBFacade:
                     if not amenity:
                         raise ValueError(f"Amenity {amenity_id} not found")
                     amenities.append(amenity)
-
                 place.amenities = amenities
 
             else:
@@ -127,10 +131,9 @@ class HBnBFacade:
         place.touch()
         return place
 
-    # ----------------- REVIEWS -----------------
+    # ---------------- REVIEWS ----------------
 
     def create_review(self, review_data):
-
         user = self.get_user(review_data["user_id"])
         if not user:
             raise ValueError("User not found")
@@ -151,7 +154,6 @@ class HBnBFacade:
 
         self.review_repo.add(review)
         place.add_review(review)
-
         return review
 
     def get_review(self, review_id):
@@ -189,17 +191,14 @@ class HBnBFacade:
         return review
 
     def delete_review(self, review_id):
-
         review = self.review_repo.get(review_id)
 
         if not review:
             return False
 
         place = review.place
-
         if review in place.reviews:
             place.reviews.remove(review)
 
         self.review_repo.delete(review_id)
-
         return True

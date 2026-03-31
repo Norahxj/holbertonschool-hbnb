@@ -1,5 +1,5 @@
 from flask_restx import Namespace, Resource, fields
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from app.services import facade
 
 api = Namespace('places', description='Place operations')
@@ -29,7 +29,6 @@ place_model = api.model('Place', {
 
 @api.route('/')
 class PlaceList(Resource):
-    @api.response(200, 'List of places retrieved successfully')
     def get(self):
         """Public: get all places"""
         places = facade.get_all_places()
@@ -43,14 +42,11 @@ class PlaceList(Resource):
 
     @jwt_required()
     @api.expect(place_model, validate=True)
-    @api.response(201, 'Place successfully created')
-    @api.response(400, 'Invalid input data')
     def post(self):
-        """Authenticated: create a new place"""
+        """Authenticated: create place"""
         try:
             place_data = api.payload
             current_user = get_jwt_identity()
-
             place_data["owner_id"] = current_user
 
             new_place = facade.create_place(place_data)
@@ -69,8 +65,6 @@ class PlaceList(Resource):
 
 @api.route('/<place_id>')
 class PlaceResource(Resource):
-    @api.response(200, 'Place details retrieved successfully')
-    @api.response(404, 'Place not found')
     def get(self, place_id):
         """Public: get place by ID"""
         place = facade.get_place(place_id)
@@ -95,23 +89,21 @@ class PlaceResource(Resource):
 
     @jwt_required()
     @api.expect(place_model, validate=False)
-    @api.response(200, 'Place updated successfully')
-    @api.response(404, 'Place not found')
-    @api.response(400, 'Invalid input data')
-    @api.response(403, 'Unauthorized action')
     def put(self, place_id):
-        """Authenticated owner only: update a place"""
+        """Owner or admin: update place"""
         place = facade.get_place(place_id)
         if not place:
             return {"error": "Place not found"}, 404
 
+        claims = get_jwt()
         current_user = get_jwt_identity()
-        if place.owner.id != current_user:
+        is_admin = claims.get('is_admin', False)
+
+        if not is_admin and place.owner.id != current_user:
             return {"error": "Unauthorized action"}, 403
 
         place_data = api.payload or {}
-
-        if "owner_id" in place_data:
+        if "owner_id" in place_data and not is_admin:
             del place_data["owner_id"]
 
         try:
@@ -136,7 +128,7 @@ class PlaceResource(Resource):
 @api.route('/<place_id>/reviews')
 class PlaceReviewList(Resource):
     def get(self, place_id):
-        """Public: get reviews for a place"""
+        """Public: get reviews by place"""
         reviews = facade.get_reviews_by_place(place_id)
 
         if reviews is None:

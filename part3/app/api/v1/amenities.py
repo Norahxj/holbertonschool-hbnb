@@ -1,4 +1,5 @@
 from flask_restx import Namespace, Resource, fields
+from flask_jwt_extended import jwt_required, get_jwt
 from app.services import facade
 
 api = Namespace('amenities', description='Amenity operations')
@@ -12,9 +13,26 @@ amenity_model = api.model('Amenity', {
 @api.route('/')
 class AmenityList(Resource):
 
-    @api.expect(amenity_model)
+    def get(self):
+        """Retrieve all amenities"""
+        amenities = facade.get_all_amenities()
+
+        return [
+            {
+                'id': a.id,
+                'name': a.name
+            }
+            for a in amenities
+        ], 200
+
+    @jwt_required()
+    @api.expect(amenity_model, validate=True)
     def post(self):
-        """Register a new amenity"""
+        """Admin only: register a new amenity"""
+        claims = get_jwt()
+
+        if not claims.get('is_admin', False):
+            return {'error': 'Admin privileges required'}, 403
 
         amenity_data = api.payload
 
@@ -29,26 +47,11 @@ class AmenityList(Resource):
         }, 201
 
 
-    def get(self):
-        """Retrieve all amenities"""
-
-        amenities = facade.get_all_amenities()
-
-        return [
-            {
-                'id': a.id,
-                'name': a.name
-            }
-            for a in amenities
-        ], 200
-
-
 @api.route('/<amenity_id>')
 class AmenityResource(Resource):
 
     def get(self, amenity_id):
         """Get amenity by ID"""
-
         amenity = facade.get_amenity(amenity_id)
 
         if not amenity:
@@ -59,10 +62,14 @@ class AmenityResource(Resource):
             'name': amenity.name
         }, 200
 
-
-    @api.expect(amenity_model)
+    @jwt_required()
+    @api.expect(amenity_model, validate=True)
     def put(self, amenity_id):
-        """Update amenity"""
+        """Admin only: update amenity"""
+        claims = get_jwt()
+
+        if not claims.get('is_admin', False):
+            return {'error': 'Admin privileges required'}, 403
 
         data = api.payload
 
@@ -74,4 +81,7 @@ class AmenityResource(Resource):
         if not amenity:
             return {'error': 'Amenity not found'}, 404
 
-        return {'message': 'Amenity updated successfully'}, 200
+        return {
+            'id': amenity.id,
+            'name': amenity.name
+        }, 200
