@@ -60,8 +60,6 @@ class PlaceResource(Resource):
         if not place:
             return {"error": "Place not found"}, 404
 
-        owner = facade.get_user(place.owner_id)
-
         return {
             "id": place.id,
             "title": place.title,
@@ -70,12 +68,12 @@ class PlaceResource(Resource):
             "latitude": place.latitude,
             "longitude": place.longitude,
             "owner": {
-                "id": owner.id,
-                "first_name": owner.first_name,
-                "last_name": owner.last_name,
-                "email": owner.email
-            } if owner else None,
-            "amenities": []
+                "id": place.owner.id,
+                "first_name": place.owner.first_name,
+                "last_name": place.owner.last_name,
+                "email": place.owner.email
+            },
+            "amenities": [{"id": a.id, "name": a.name} for a in place.amenities]
         }, 200
 
     @jwt_required()
@@ -90,7 +88,7 @@ class PlaceResource(Resource):
         current_user = get_jwt_identity()
         is_admin = claims.get('is_admin', False)
 
-        if not is_admin and place.owner_id != current_user:
+        if not is_admin and place.owner.id != current_user:
             return {"error": "Unauthorized action"}, 403
 
         place_data = api.payload or {}

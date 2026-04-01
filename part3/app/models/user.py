@@ -13,6 +13,9 @@ class User(BaseModel):
     password = db.Column(db.String(128), nullable=False)
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
 
+    places = db.relationship('Place', backref='owner', lazy=True, cascade='all, delete-orphan')
+    reviews = db.relationship('Review', backref='user', lazy=True, cascade='all, delete-orphan')
+
     def __init__(self, first_name, last_name, email, password, is_admin=False):
         self.first_name = first_name
         self.last_name = last_name
@@ -41,13 +44,11 @@ class User(BaseModel):
         return value
 
     def hash_password(self, password):
-        """Hashes the password before storing it."""
         if not password:
             raise ValueError("Password is required")
         self.password = bcrypt.generate_password_hash(password).decode('utf-8')
 
     def verify_password(self, password):
-        """Verifies if the provided password matches the hashed password."""
         return bcrypt.check_password_hash(self.password, password)
 
     def to_dict(self):

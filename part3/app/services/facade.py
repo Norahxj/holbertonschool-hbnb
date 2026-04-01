@@ -4,6 +4,7 @@ from app.models.user import User
 from app.models.amenity import Amenity
 from app.models.place import Place
 from app.models.review import Review
+from app.extensions import db
 
 
 class HBnBFacade:
@@ -41,7 +42,6 @@ class HBnBFacade:
         for key, value in data.items():
             setattr(user, key, value)
 
-        from app.extensions import db
         db.session.commit()
         return user
 
@@ -71,11 +71,12 @@ class HBnBFacade:
         if not owner:
             raise ValueError("Owner not found")
 
-        # Amenities are validated for existence only for now.
+        amenities = []
         for amenity_id in place_data.get("amenities", []):
             amenity = self.get_amenity(amenity_id)
             if not amenity:
                 raise ValueError(f"Amenity {amenity_id} not found")
+            amenities.append(amenity)
 
         place = Place(
             title=place_data["title"],
@@ -86,6 +87,7 @@ class HBnBFacade:
             owner_id=place_data["owner_id"]
         )
 
+        place.amenities = amenities
         self.place_repo.add(place)
         return place
 
@@ -106,14 +108,21 @@ class HBnBFacade:
                 raise ValueError("Owner not found")
 
         if "amenities" in place_data:
+            amenities = []
             for amenity_id in place_data["amenities"]:
                 amenity = self.get_amenity(amenity_id)
                 if not amenity:
                     raise ValueError(f"Amenity {amenity_id} not found")
+                amenities.append(amenity)
+            place.amenities = amenities
             place_data = place_data.copy()
             del place_data["amenities"]
 
-        return self.place_repo.update(place_id, place_data)
+        for key, value in place_data.items():
+            setattr(place, key, value)
+
+        db.session.commit()
+        return place
 
     # ---------------- REVIEWS ----------------
 
@@ -147,14 +156,18 @@ class HBnBFacade:
         if not place:
             return None
 
-        return [r for r in self.review_repo.get_all() if r.place_id == place_id]
+        return place.reviews
 
     def update_review(self, review_id, review_data):
         review = self.review_repo.get(review_id)
         if not review:
             return None
 
-        return self.review_repo.update(review_id, review_data)
+        for key, value in review_data.items():
+            setattr(review, key, value)
+
+        db.session.commit()
+        return review
 
     def delete_review(self, review_id):
         return self.review_repo.delete(review_id)
