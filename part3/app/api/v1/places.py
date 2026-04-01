@@ -4,18 +4,6 @@ from app.services import facade
 
 api = Namespace('places', description='Place operations')
 
-amenity_model = api.model('PlaceAmenity', {
-    'id': fields.String(description='Amenity ID'),
-    'name': fields.String(description='Name of the amenity')
-})
-
-user_model = api.model('PlaceUser', {
-    'id': fields.String(description='User ID'),
-    'first_name': fields.String(description='First name of the owner'),
-    'last_name': fields.String(description='Last name of the owner'),
-    'email': fields.String(description='Email of the owner')
-})
-
 place_model = api.model('Place', {
     'title': fields.String(required=True, description='Title of the place'),
     'description': fields.String(description='Description of the place'),
@@ -37,7 +25,8 @@ class PlaceList(Resource):
             "title": p.title,
             "price": p.price,
             "latitude": p.latitude,
-            "longitude": p.longitude
+            "longitude": p.longitude,
+            "owner_id": p.owner_id
         } for p in places], 200
 
     @jwt_required()
@@ -57,7 +46,7 @@ class PlaceList(Resource):
                 "price": new_place.price,
                 "latitude": new_place.latitude,
                 "longitude": new_place.longitude,
-                "owner_id": new_place.owner.id
+                "owner_id": new_place.owner_id
             }, 201
         except ValueError as e:
             return {"error": str(e)}, 400
@@ -71,6 +60,8 @@ class PlaceResource(Resource):
         if not place:
             return {"error": "Place not found"}, 404
 
+        owner = facade.get_user(place.owner_id)
+
         return {
             "id": place.id,
             "title": place.title,
@@ -79,12 +70,12 @@ class PlaceResource(Resource):
             "latitude": place.latitude,
             "longitude": place.longitude,
             "owner": {
-                "id": place.owner.id,
-                "first_name": place.owner.first_name,
-                "last_name": place.owner.last_name,
-                "email": place.owner.email
-            },
-            "amenities": [{"id": a.id, "name": a.name} for a in place.amenities]
+                "id": owner.id,
+                "first_name": owner.first_name,
+                "last_name": owner.last_name,
+                "email": owner.email
+            } if owner else None,
+            "amenities": []
         }, 200
 
     @jwt_required()
@@ -99,7 +90,7 @@ class PlaceResource(Resource):
         current_user = get_jwt_identity()
         is_admin = claims.get('is_admin', False)
 
-        if not is_admin and place.owner.id != current_user:
+        if not is_admin and place.owner_id != current_user:
             return {"error": "Unauthorized action"}, 403
 
         place_data = api.payload or {}
@@ -119,7 +110,7 @@ class PlaceResource(Resource):
                 "price": updated_place.price,
                 "latitude": updated_place.latitude,
                 "longitude": updated_place.longitude,
-                "owner_id": updated_place.owner.id
+                "owner_id": updated_place.owner_id
             }, 200
         except ValueError as e:
             return {"error": str(e)}, 400
@@ -138,6 +129,8 @@ class PlaceReviewList(Resource):
             {
                 "id": r.id,
                 "text": r.text,
-                "rating": r.rating
+                "rating": r.rating,
+                "user_id": r.user_id,
+                "place_id": r.place_id
             } for r in reviews
         ], 200

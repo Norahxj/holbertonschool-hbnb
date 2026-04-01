@@ -1,4 +1,4 @@
-from app.persistence.repository import InMemoryRepository
+from app.persistence.sqlalchemy_repository import SQLAlchemyRepository
 from app.persistence.user_repository import UserRepository
 from app.models.user import User
 from app.models.amenity import Amenity
@@ -10,9 +10,9 @@ class HBnBFacade:
 
     def __init__(self):
         self.user_repo = UserRepository()
-        self.amenity_repo = InMemoryRepository()
-        self.place_repo = InMemoryRepository()
-        self.review_repo = InMemoryRepository()
+        self.amenity_repo = SQLAlchemyRepository(Amenity)
+        self.place_repo = SQLAlchemyRepository(Place)
+        self.review_repo = SQLAlchemyRepository(Review)
 
     # ---------------- USERS ----------------
 
@@ -41,7 +41,8 @@ class HBnBFacade:
         for key, value in data.items():
             setattr(user, key, value)
 
-        user.touch()
+        from app.extensions import db
+        db.session.commit()
         return user
 
     def get_user_by_email(self, email):
@@ -70,12 +71,11 @@ class HBnBFacade:
         if not owner:
             raise ValueError("Owner not found")
 
-        amenities = []
+        # Amenities are validated for existence only for now.
         for amenity_id in place_data.get("amenities", []):
             amenity = self.get_amenity(amenity_id)
             if not amenity:
                 raise ValueError(f"Amenity {amenity_id} not found")
-            amenities.append(amenity)
 
         place = Place(
             title=place_data["title"],
@@ -83,12 +83,10 @@ class HBnBFacade:
             price=place_data["price"],
             latitude=place_data["latitude"],
             longitude=place_data["longitude"],
-            owner=owner
+            owner_id=place_data["owner_id"]
         )
 
-        place.amenities = amenities
         self.place_repo.add(place)
-
         return place
 
     def get_place(self, place_id):
@@ -102,27 +100,20 @@ class HBnBFacade:
         if not place:
             return None
 
-        for key, value in place_data.items():
-            if key == "owner_id":
-                owner = self.get_user(value)
-                if not owner:
-                    raise ValueError("Owner not found")
-                place.owner = owner
+        if "owner_id" in place_data:
+            owner = self.get_user(place_data["owner_id"])
+            if not owner:
+                raise ValueError("Owner not found")
 
-            elif key == "amenities":
-                amenities = []
-                for amenity_id in value:
-                    amenity = self.get_amenity(amenity_id)
-                    if not amenity:
-                        raise ValueError(f"Amenity {amenity_id} not found")
-                    amenities.append(amenity)
-                place.amenities = amenities
+        if "amenities" in place_data:
+            for amenity_id in place_data["amenities"]:
+                amenity = self.get_amenity(amenity_id)
+                if not amenity:
+                    raise ValueError(f"Amenity {amenity_id} not found")
+            place_data = place_data.copy()
+            del place_data["amenities"]
 
-            else:
-                setattr(place, key, value)
-
-        place.touch()
-        return place
+        return self.place_repo.update(place_id, place_data)
 
     # ---------------- REVIEWS ----------------
 
@@ -135,18 +126,14 @@ class HBnBFacade:
         if not place:
             raise ValueError("Place not found")
 
-        if not (1 <= review_data["rating"] <= 5):
-            raise ValueError("Rating must be between 1 and 5")
-
         review = Review(
             text=review_data["text"],
             rating=review_data["rating"],
-            user=user,
-            place=place
+            user_id=review_data["user_id"],
+            place_id=review_data["place_id"]
         )
 
         self.review_repo.add(review)
-        place.add_review(review)
         return review
 
     def get_review(self, review_id):
@@ -157,41 +144,17 @@ class HBnBFacade:
 
     def get_reviews_by_place(self, place_id):
         place = self.get_place(place_id)
-
         if not place:
             return None
 
-        return place.reviews
+        return [r for r in self.review_repo.get_all() if r.place_id == place_id]
 
     def update_review(self, review_id, review_data):
         review = self.review_repo.get(review_id)
-
         if not review:
             return None
 
-        if "text" in review_data:
-            if not review_data["text"]:
-                raise ValueError("text cannot be empty")
-            review.text = review_data["text"]
-
-        if "rating" in review_data:
-            rating = review_data["rating"]
-            if rating < 1 or rating > 5:
-                raise ValueError("rating must be between 1 and 5")
-            review.rating = rating
-
-        review.touch()
-        return review
+        return self.review_repo.update(review_id, review_data)
 
     def delete_review(self, review_id):
-        review = self.review_repo.get(review_id)
-
-        if not review:
-            return False
-
-        place = review.place
-        if review in place.reviews:
-            place.reviews.remove(review)
-
-        self.review_repo.delete(review_id)
-        return True
+        return self.review_repo.delete(review_id)

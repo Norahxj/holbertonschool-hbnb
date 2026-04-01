@@ -27,7 +27,9 @@ class ReviewList(Resource):
             {
                 "id": r.id,
                 "text": r.text,
-                "rating": r.rating
+                "rating": r.rating,
+                "user_id": r.user_id,
+                "place_id": r.place_id
             } for r in reviews
         ], 200
 
@@ -42,11 +44,11 @@ class ReviewList(Resource):
         if not place:
             return {"error": "Place not found"}, 404
 
-        if place.owner.id == current_user:
+        if place.owner_id == current_user:
             return {"error": "You cannot review your own place"}, 400
 
         for review in facade.get_all_reviews():
-            if review.user.id == current_user and review.place.id == review_data["place_id"]:
+            if review.user_id == current_user and review.place_id == review_data["place_id"]:
                 return {"error": "You have already reviewed this place"}, 400
 
         review_data["user_id"] = current_user
@@ -57,8 +59,8 @@ class ReviewList(Resource):
                 "id": review.id,
                 "text": review.text,
                 "rating": review.rating,
-                "user_id": review.user.id,
-                "place_id": review.place.id
+                "user_id": review.user_id,
+                "place_id": review.place_id
             }, 201
         except ValueError as e:
             return {"error": str(e)}, 400
@@ -78,8 +80,8 @@ class ReviewResource(Resource):
             "id": review.id,
             "text": review.text,
             "rating": review.rating,
-            "user_id": review.user.id,
-            "place_id": review.place.id
+            "user_id": review.user_id,
+            "place_id": review.place_id
         }, 200
 
     @jwt_required()
@@ -95,7 +97,7 @@ class ReviewResource(Resource):
         current_user = get_jwt_identity()
         is_admin = claims.get('is_admin', False)
 
-        if not is_admin and review.user.id != current_user:
+        if not is_admin and review.user_id != current_user:
             return {"error": "Unauthorized action"}, 403
 
         review_data = api.payload or {}
@@ -111,8 +113,8 @@ class ReviewResource(Resource):
                 "id": updated_review.id,
                 "text": updated_review.text,
                 "rating": updated_review.rating,
-                "user_id": updated_review.user.id,
-                "place_id": updated_review.place.id
+                "user_id": updated_review.user_id,
+                "place_id": updated_review.place_id
             }, 200
 
         except ValueError as e:
@@ -130,7 +132,7 @@ class ReviewResource(Resource):
         current_user = get_jwt_identity()
         is_admin = claims.get('is_admin', False)
 
-        if not is_admin and review.user.id != current_user:
+        if not is_admin and review.user_id != current_user:
             return {"error": "Unauthorized action"}, 403
 
         deleted = facade.delete_review(review_id)
