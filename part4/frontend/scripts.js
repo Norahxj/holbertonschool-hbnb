@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:5000/api/v1/auth/login";
+const API_URL = "http://127.0.0.1:5000/api/v1";  // BASE URL
 
 function getCookie(name) {
     const value = `; ${document.cookie}`;
@@ -6,6 +6,7 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';')[0];
     return null;
 }
+
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
 
