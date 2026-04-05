@@ -1,5 +1,3 @@
-// Handle login functionality using backend API
-
 document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.getElementById("login-form");
 
@@ -11,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const password = document.getElementById("password").value;
 
             try {
-                const response = await fetch("http://127.0.0.1:5000/api/auth", {
+                const response = await fetch("http://127.0.0.1:5000/api/v1/auth", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -22,10 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (response.ok) {
                     const data = await response.json();
 
-                    // Store JWT token in cookie
                     document.cookie = `token=${data.access_token}; path=/`;
 
-                    // Redirect to main page
                     window.location.href = "index.html";
                 } else {
                     alert("Login failed: Invalid email or password");
