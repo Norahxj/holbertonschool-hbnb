@@ -1,6 +1,6 @@
 from flask import Flask
-from flask_cors import CORS
 from flask_restx import Api
+from flask_cors import CORS
 
 from app.extensions import bcrypt, jwt, db
 from app.api.v1.users import api as users_ns
@@ -13,6 +13,8 @@ from app.api.v1.auth import api as auth_ns
 def create_app(config_class="config.DevelopmentConfig"):
     app = Flask(__name__)
     app.config.from_object(config_class)
+    
+    CORS(app, resources={r"/*": {"origins": "*"}})
 
     bcrypt.init_app(app)
     jwt.init_app(app)
