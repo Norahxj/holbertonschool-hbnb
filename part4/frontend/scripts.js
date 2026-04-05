@@ -8,8 +8,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
+            console.log("Starting login request");
+            console.log("Email:", email);
+            console.log("Password:", password);
+
+            const url = "http://127.0.0.1:5000/api/v1/auth/login";
+
+            console.log("Request URL:", url);
+
             try {
-                const response = await fetch("http://127.0.0.1:5000/api/v1/auth/login", {
+                const response = await fetch(url, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -17,15 +25,35 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ email, password })
                 });
 
+                console.log("Response Status:", response.status);
+                console.log("Response OK:", response.ok);
+
+                const rawText = await response.text();
+                console.log("Raw Response Text:", rawText);
+
                 if (response.ok) {
-                    const data = await response.json();
+                    let data;
+                    try {
+                        data = JSON.parse(rawText);
+                    } catch (jsonError) {
+                        console.error("JSON Parse Error:", jsonError);
+                        alert("Error: Server returned invalid JSON");
+                        return;
+                    }
+
+                    console.log("Token Received:", data.access_token);
+
                     document.cookie = `token=${data.access_token}; path=/`;
-                    window.location.href = "index.html";
+
+                    console.log("Redirecting to index.html");
+			 window.location.href = "index.html";
                 } else {
-                    alert("Login failed");
+                    console.error("Login failed. Status:", response.status);
+                    alert("Login failed. Status: " + response.status);
                 }
             } catch (error) {
-                alert("Error connecting to server");
+                console.error("Fetch Error:", error);
+                alert("Error connecting to server: " + error);
             }
         });
     }
