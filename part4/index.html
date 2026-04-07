@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HBnB - Places</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="images/icon.png" type="image/png">
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <a href="index.html">
+        <img src="images/logo.png" alt="HBnB logo" class="logo">
+      </a>
+
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+      </nav>
+
+      <a href="login.html" class="login-button">Login</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Discover Amazing Places to Stay</h1>
+      <p>Explore comfortable and unique stays for your next trip.</p>
+    </section>
+
+    <section id="filter" class="filter-section">
+      <label for="country-filter">Filter by Country:</label>
+      <select id="country-filter" name="country-filter">
+        <option value="all">All</option>
+        <option value="saudi-arabia">Saudi Arabia</option>
+        <option value="uae">UAE</option>
+        <option value="egypt">Egypt</option>
+      </select>
+    </section>
+
+    <section id="places-list" class="places-section">
+      <article class="place-card">
+        <img src="images/place1.jpg" alt="Cozy apartment">
+        <h2>Cozy Apartment</h2>
+        <p><strong>Price per night:</strong> $120</p>
+        <a href="place.html" class="details-button">View Details</a>
+      </article>
+
+      <article class="place-card">
+        <img src="images/place2.jpg" alt="Modern studio">
+        <h2>Modern Studio</h2>
+        <p><strong>Price per night:</strong> $95</p>
+        <a href="place.html" class="details-button">View Details</a>
+      </article>
+
+      <article class="place-card">
+        <img src="images/place3.jpg" alt="Beach house">
+        <h2>Beach House</h2>
+        <p><strong>Price per night:</strong> $220</p>
+        <a href="place.html" class="details-button">View Details</a>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <p>All rights reserved.</p>
+  </footer>
+</body>
+</html>
