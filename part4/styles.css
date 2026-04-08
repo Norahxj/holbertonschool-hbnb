@@ -235,6 +235,14 @@ main {
   resize: vertical;
 }
 
+#error-message {
+  color: red;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  min-height: 20px;
+}
+
 .place-reference {
   margin-bottom: 10px;
   text-align: center;
@@ -246,4 +254,11 @@ footer {
   text-align: center;
   padding: 15px;
   margin-top: 30px;
+}
+
+#error-message {
+  color: red;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
 }
