@@ -169,6 +169,12 @@ main {
   padding-left: 20px;
 }
 
+.places-section h2 {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 .add-review {
   margin-top: 20px;
 }

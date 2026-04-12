@@ -16,10 +16,8 @@
 
       <nav>
         <a href="index.html">Home</a>
-        <a href="login.html">Login</a>
+        <a href="login.html" id="login-link">Login</a>
       </nav>
-
-      <a href="login.html" class="login-button">Login</a>
     </div>
   </header>
 
@@ -29,44 +27,26 @@
       <p>Explore comfortable and unique stays for your next trip.</p>
     </section>
 
-    <div id="filter" class="filter-section">
-      <label for="country-filter">Filter by Country:</label>
-      <select id="country-filter" name="country-filter">
-        <option value="all">All</option>
-        <option value="saudi-arabia">Saudi Arabia</option>
-        <option value="uae">UAE</option>
-        <option value="egypt">Egypt</option>
+    <section id="filter" class="filter-section">
+      <h2>Filter by Price</h2>
+      <label for="price-filter">Max Price:</label>
+      <select id="price-filter">
+        <option value="10">10</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="all" selected>All</option>
       </select>
-    </div>
+    </section>
 
     <section id="places-list" class="places-section">
       <h2>Available Places</h2>
-
-      <article class="place-card">
-        <img src="images/place1.jpg" alt="Cozy apartment">
-        <h3>Cozy Apartment</h3>
-        <p><strong>Price per night:</strong> $120</p>
-        <a href="place.html" class="details-button">View Details</a>
-      </article>
-
-      <article class="place-card">
-        <img src="images/place2.jpg" alt="Modern studio">
-        <h3>Modern Studio</h3>
-        <p><strong>Price per night:</strong> $95</p>
-        <a href="place.html" class="details-button">View Details</a>
-      </article>
-
-      <article class="place-card">
-        <img src="images/place3.jpg" alt="Beach house">
-        <h3>Beach House</h3>
-        <p><strong>Price per night:</strong> $220</p>
-        <a href="place.html" class="details-button">View Details</a>
-      </article>
     </section>
   </main>
 
   <footer>
     <p>All rights reserved.</p>
   </footer>
+
+  <script src="scripts.js"></script>
 </body>
 </html>
