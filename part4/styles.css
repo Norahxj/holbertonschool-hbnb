@@ -183,8 +183,8 @@ main {
   margin-top: 30px;
 }
 
-.reviews-section h2 {
-  margin-bottom: 10px;
+.reviews-section p {
+  margin: 10px 20px;
 }
 
 .review-card {
