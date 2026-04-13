@@ -141,6 +141,54 @@ async function fetchPlaces(token) {
   }
 }
 
+function getPlaceImage(place) {
+  const title = (place.title || place.name || '').toLowerCase();
+
+  if (title === 'cozy apartment') {
+    return 'images/cozy_apartment.png';
+  }
+
+  if (title === 'modern studio') {
+    return 'images/modern_studio.png';
+  }
+
+  if (title === 'luxury villa') {
+    return 'images/luxury_villa.png';
+  }
+
+  return 'images/logo.png';
+}
+
+function getPlaceLocation(place) {
+  if (place.latitude !== undefined && place.longitude !== undefined) {
+    return `${place.latitude}, ${place.longitude}`;
+  }
+
+  return 'Location not available';
+}
+
+function getPlaceDescription(place) {
+  if (place.description) {
+    return place.description;
+  }
+
+  const title = (place.title || place.name || '').toLowerCase();
+
+  if (title === 'cozy apartment') {
+    return 'Nice and quiet';
+  }
+
+  if (title === 'modern studio') {
+    return 'A modern studio in the city center';
+  }
+
+  if (title === 'luxury villa') {
+    return 'A spacious villa with a pool';
+  }
+
+  return 'No description available.';
+}
+
 function displayPlaces(places) {
   const placesList = document.getElementById('places-list');
 
@@ -155,13 +203,15 @@ function displayPlaces(places) {
     placeCard.className = 'place-card';
 
     const price = Number(place.price || place.price_by_night || 0);
-    const description = place.description || 'No description available.';
     const title = place.title || place.name || 'Unnamed Place';
-    const location = place.location || 'Location not available';
+    const description = getPlaceDescription(place);
+    const location = getPlaceLocation(place);
+    const imageSrc = getPlaceImage(place);
 
     placeCard.setAttribute('data-price', price);
 
     placeCard.innerHTML = `
+      <img src="${imageSrc}" alt="${title}">
       <h3>${title}</h3>
       <p><strong>Price per night:</strong> $${price}</p>
       <p><strong>Location:</strong> ${location}</p>
@@ -271,6 +321,8 @@ function displayPlaceDetails(place) {
   const title = place.title || place.name || 'Unnamed Place';
   const description = place.description || 'No description available.';
   const price = place.price || place.price_by_night || 0;
+  const imageSrc = getPlaceImage(place);
+  const location = getPlaceLocation(place);
 
   let ownerName = 'Owner information not available';
   if (place.owner) {
@@ -283,11 +335,13 @@ function displayPlaceDetails(place) {
   }
 
   placeDetailsSection.innerHTML = `
+    <img src="${imageSrc}" alt="${title}">
     <h1>${title}</h1>
 
     <div class="place-info">
       <p><strong>Host:</strong> ${ownerName}</p>
       <p><strong>Price per night:</strong> $${price}</p>
+      <p><strong>Location:</strong> ${location}</p>
     </div>
 
     <div class="place-info">
