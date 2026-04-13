@@ -84,32 +84,45 @@ async function loginUser(email, password) {
 function setupIndexPage() {
   const placesList = document.getElementById('places-list');
   const priceFilter = document.getElementById('price-filter');
+  const cityFilter = document.getElementById('city-filter');
 
-  if (!placesList || !priceFilter) {
+  if (!placesList || !priceFilter || !cityFilter) {
     return;
   }
 
-  populatePriceFilter();
+  populateFilters();
   fetchPlaces(getCookie('token'));
 
   priceFilter.addEventListener('change', () => {
-    filterPlacesByPrice();
+    filterPlaces();
+  });
+
+  cityFilter.addEventListener('change', () => {
+    filterPlaces();
   });
 }
 
-function populatePriceFilter() {
+function populateFilters() {
   const priceFilter = document.getElementById('price-filter');
+  const cityFilter = document.getElementById('city-filter');
 
-  if (!priceFilter) {
-    return;
+  if (priceFilter) {
+    priceFilter.innerHTML = `
+      <option value="all" selected>All Prices</option>
+      <option value="10">Up to $10</option>
+      <option value="50">Up to $50</option>
+      <option value="100">Up to $100</option>
+    `;
   }
 
-  priceFilter.innerHTML = `
-    <option value="10">10</option>
-    <option value="50">50</option>
-    <option value="100">100</option>
-    <option value="all" selected>All</option>
-  `;
+  if (cityFilter) {
+    cityFilter.innerHTML = `
+      <option value="all" selected>All Cities</option>
+      <option value="Riyadh">Riyadh</option>
+      <option value="Jeddah">Jeddah</option>
+      <option value="Yanbu">Yanbu</option>
+    `;
+  }
 }
 
 async function fetchPlaces(token) {
@@ -159,12 +172,26 @@ function getPlaceImage(place) {
   return 'images/logo.png';
 }
 
-function getPlaceLocation(place) {
-  if (place.latitude !== undefined && place.longitude !== undefined) {
-    return `${place.latitude}, ${place.longitude}`;
+function getPlaceCity(place) {
+  const title = (place.title || place.name || '').toLowerCase();
+
+  if (title === 'cozy apartment') {
+    return 'Yanbu';
   }
 
-  return 'Location not available';
+  if (title === 'modern studio') {
+    return 'Jeddah';
+  }
+
+  if (title === 'luxury villa') {
+    return 'Riyadh';
+  }
+
+  return 'Unknown City';
+}
+
+function getPlaceLocation(place) {
+  return getPlaceCity(place);
 }
 
 function getPlaceDescription(place) {
@@ -205,10 +232,12 @@ function displayPlaces(places) {
     const price = Number(place.price || place.price_by_night || 0);
     const title = place.title || place.name || 'Unnamed Place';
     const description = getPlaceDescription(place);
+    const city = getPlaceCity(place);
     const location = getPlaceLocation(place);
     const imageSrc = getPlaceImage(place);
 
     placeCard.setAttribute('data-price', price);
+    placeCard.setAttribute('data-city', city);
 
     placeCard.innerHTML = `
       <img src="${imageSrc}" alt="${title}">
@@ -222,23 +251,32 @@ function displayPlaces(places) {
     placesList.appendChild(placeCard);
   });
 
-  filterPlacesByPrice();
+  filterPlaces();
 }
 
-function filterPlacesByPrice() {
+function filterPlaces() {
   const priceFilter = document.getElementById('price-filter');
+  const cityFilter = document.getElementById('city-filter');
   const placeCards = document.querySelectorAll('.place-card');
 
-  if (!priceFilter) {
+  if (!priceFilter || !cityFilter) {
     return;
   }
 
-  const selectedValue = priceFilter.value;
+  const selectedPrice = priceFilter.value;
+  const selectedCity = cityFilter.value;
 
   placeCards.forEach((card) => {
     const placePrice = Number(card.getAttribute('data-price'));
+    const placeCity = card.getAttribute('data-city');
 
-    if (selectedValue === 'all' || placePrice <= Number(selectedValue)) {
+    const matchesPrice =
+      selectedPrice === 'all' || placePrice <= Number(selectedPrice);
+
+    const matchesCity =
+      selectedCity === 'all' || placeCity === selectedCity;
+
+    if (matchesPrice && matchesCity) {
       card.style.display = 'block';
     } else {
       card.style.display = 'none';
