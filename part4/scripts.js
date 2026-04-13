@@ -438,9 +438,12 @@ function displayPlaceReviews(reviews) {
 
     const reviewText = review.text || 'No review text available.';
     const rating = review.rating || 'No rating';
+    const reviewerName = review.user
+      ? `${review.user.first_name} ${review.user.last_name}`
+      : 'Guest';
 
     reviewCard.innerHTML = `
-      <h3>Guest Review</h3>
+      <h3>Review by ${reviewerName}</h3>
       <p class="review-comment">${reviewText}</p>
       <p><strong>Rating:</strong> ${rating}/5</p>
     `;
