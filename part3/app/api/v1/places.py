@@ -23,6 +23,7 @@ class PlaceList(Resource):
         return [{
             "id": p.id,
             "title": p.title,
+            "description": p.description,
             "price": p.price,
             "latitude": p.latitude,
             "longitude": p.longitude,
@@ -129,6 +130,11 @@ class PlaceReviewList(Resource):
                 "text": r.text,
                 "rating": r.rating,
                 "user_id": r.user_id,
-                "place_id": r.place_id
+                "place_id": r.place_id,
+                "user": {
+                    "id": r.user.id,
+                    "first_name": r.user.first_name,
+                    "last_name": r.user.last_name
+                }
             } for r in reviews
         ], 200
