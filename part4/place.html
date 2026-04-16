@@ -1,45 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Basic page metadata -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Page title -->
   <title>HBnB - Place Details</title>
+
+  <!-- Main stylesheet -->
   <link rel="stylesheet" href="styles.css">
+
+  <!-- Website icon -->
   <link rel="icon" href="images/icon.png" type="image/png">
 </head>
 <body>
+  <!-- Header with logo, navigation, and login link -->
   <header>
     <div class="header-container">
+      <!-- Logo linking to homepage -->
       <a href="index.html">
         <img src="images/logo.png" alt="HBnB logo" class="logo">
       </a>
 
+      <!-- Navigation -->
       <nav>
         <a href="index.html">Home</a>
       </nav>
 
+      <!-- Login button -->
       <a href="login.html" class="login-button" id="login-link">Login</a>
     </div>
   </header>
 
+  <!-- Main content -->
   <main>
+    <!-- Section where the selected place details will be displayed -->
     <section id="place-details" class="place-details">
       <h1>Place Details</h1>
       <p>Loading place details...</p>
     </section>
 
+    <!-- Section where place reviews will be displayed -->
     <section id="reviews" class="reviews-section">
       <h2>Reviews</h2>
       <p>Loading reviews...</p>
     </section>
 
+    <!-- Section where the "Add Review" button will appear for logged-in users -->
     <section id="add-review" class="add-review"></section>
   </main>
 
+  <!-- Footer -->
   <footer>
-    <p>All rights reserved.</p>
+    <p>© 2026 HBnB Evolution. All rights reserved.</p>
   </footer>
 
+  <!-- Main JavaScript file -->
   <script src="scripts.js"></script>
 </body>
 </html>

@@ -1,32 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Basic page metadata -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Page title -->
   <title>HBnB - Login</title>
+
+  <!-- Main stylesheet -->
   <link rel="stylesheet" href="styles.css">
+
+  <!-- Website icon -->
   <link rel="icon" href="images/icon.png" type="image/png">
 </head>
 <body>
+  <!-- Header containing logo, navigation, and login shortcut -->
   <header>
     <div class="header-container">
+      <!-- Logo linking to homepage -->
       <a href="index.html">
         <img src="images/logo.png" alt="HBnB logo" class="logo">
       </a>
 
+      <!-- Navigation links -->
       <nav>
         <a href="index.html">Home</a>
       </nav>
 
+      <!-- Login button -->
       <a href="login.html" class="login-button" id="login-link">Login</a>
     </div>
   </header>
 
+  <!-- Main content area -->
   <main>
+    <!-- Login form section -->
     <section class="form-section">
       <form id="login-form" class="form">
         <h1>Login</h1>
 
+        <!-- Email input -->
         <label for="email">Email</label>
         <input
           type="email"
@@ -36,6 +50,7 @@
           required
         >
 
+        <!-- Password input -->
         <label for="password">Password</label>
         <input
           type="password"
@@ -45,17 +60,21 @@
           required
         >
 
+        <!-- Error message area for failed login -->
         <p id="error-message"></p>
 
+        <!-- Submit button -->
         <button type="submit" class="submit-button">Login</button>
       </form>
     </section>
   </main>
 
+  <!-- Footer -->
   <footer>
-    <p>All rights reserved.</p>
+    <p>© 2026 HBnB Evolution. All rights reserved.</p>
   </footer>
 
+  <!-- Main JavaScript file -->
   <script src="scripts.js"></script>
 </body>
 </html>

@@ -1,19 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Basic page metadata -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Page title shown in the browser tab -->
   <title>HBnB - Places</title>
+
+  <!-- Main stylesheet -->
   <link rel="stylesheet" href="styles.css">
+
+  <!-- Website icon -->
   <link rel="icon" href="images/icon.png" type="image/png">
 </head>
 <body>
+  <!-- Header section with logo and navigation -->
   <header>
     <div class="header-container">
+      <!-- Website logo linking back to home page -->
       <a href="index.html">
         <img src="images/logo.png" alt="HBnB logo" class="logo">
       </a>
 
+      <!-- Main navigation menu -->
       <nav>
         <a href="index.html">Home</a>
         <a href="login.html" id="login-link">Login</a>
@@ -21,12 +31,15 @@
     </div>
   </header>
 
+  <!-- Main page content -->
   <main>
+    <!-- Hero section introducing the website -->
     <section class="hero">
       <h1>Discover Amazing Places to Stay</h1>
       <p>Explore comfortable and unique stays for your next trip.</p>
     </section>
 
+    <!-- Filter section for narrowing places by price and city -->
     <section id="filter" class="filter-section">
       <h2>Filter by Price</h2>
       <select id="price-filter">
@@ -45,15 +58,18 @@
       </select>
     </section>
 
+    <!-- Section where place cards will be inserted dynamically by JavaScript -->
     <section id="places-list" class="places-section">
       <h2>Available Places</h2>
     </section>
   </main>
 
+  <!-- Footer section -->
   <footer>
-    <p>All rights reserved.</p>
+    <p>© 2026 HBnB Evolution. All rights reserved.</p>
   </footer>
 
+  <!-- Main JavaScript file -->
   <script src="scripts.js"></script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+// Run the correct setup functions after the HTML page is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
   updateLoginLinkVisibility();
   setupLoginForm();
@@ -6,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupAddReviewPage();
 });
 
+// Show or hide the login link depending on whether a token exists
 function updateLoginLinkVisibility() {
   const token = getCookie('token');
   const loginLink = document.getElementById('login-link');
@@ -21,6 +23,7 @@ function updateLoginLinkVisibility() {
   }
 }
 
+// Attach login form submit behavior if the current page contains the login form
 function setupLoginForm() {
   const loginForm = document.getElementById('login-form');
 
@@ -54,6 +57,7 @@ function setupLoginForm() {
   });
 }
 
+// Send login request to the backend API and store the returned token in cookies
 async function loginUser(email, password) {
   const response = await fetch('/api/v1/auth/login', {
     method: 'POST',
@@ -81,6 +85,7 @@ async function loginUser(email, password) {
   window.location.href = 'index.html';
 }
 
+// Initialize the home page by loading places and connecting the filters
 function setupIndexPage() {
   const placesList = document.getElementById('places-list');
   const priceFilter = document.getElementById('price-filter');
@@ -102,6 +107,7 @@ function setupIndexPage() {
   });
 }
 
+// Fill the price and city filters with default options
 function populateFilters() {
   const priceFilter = document.getElementById('price-filter');
   const cityFilter = document.getElementById('city-filter');
@@ -125,6 +131,7 @@ function populateFilters() {
   }
 }
 
+// Fetch the list of places from the backend API
 async function fetchPlaces(token) {
   const headers = {};
 
@@ -154,6 +161,7 @@ async function fetchPlaces(token) {
   }
 }
 
+// Return an image path based on the place title
 function getPlaceImage(place) {
   const title = (place.title || place.name || '').toLowerCase();
 
@@ -172,6 +180,7 @@ function getPlaceImage(place) {
   return 'images/logo.png';
 }
 
+// Return a city based on the place title
 function getPlaceCity(place) {
   const title = (place.title || place.name || '').toLowerCase();
 
@@ -190,10 +199,12 @@ function getPlaceCity(place) {
   return 'Unknown City';
 }
 
+// Return the location string for a place
 function getPlaceLocation(place) {
   return getPlaceCity(place);
 }
 
+// Return a description for the place, using API data if available
 function getPlaceDescription(place) {
   if (place.description) {
     return place.description;
@@ -216,6 +227,7 @@ function getPlaceDescription(place) {
   return 'No description available.';
 }
 
+// Render all places as cards on the home page
 function displayPlaces(places) {
   const placesList = document.getElementById('places-list');
 
@@ -236,6 +248,7 @@ function displayPlaces(places) {
     const location = getPlaceLocation(place);
     const imageSrc = getPlaceImage(place);
 
+    // Store filter values as custom data attributes on each card
     placeCard.setAttribute('data-price', price);
     placeCard.setAttribute('data-city', city);
 
@@ -251,9 +264,11 @@ function displayPlaces(places) {
     placesList.appendChild(placeCard);
   });
 
+  // Apply filters after displaying the places
   filterPlaces();
 }
 
+// Filter visible place cards based on selected price and city
 function filterPlaces() {
   const priceFilter = document.getElementById('price-filter');
   const cityFilter = document.getElementById('city-filter');
@@ -284,6 +299,7 @@ function filterPlaces() {
   });
 }
 
+// Initialize the place details page
 function setupPlacePage() {
   const placeDetailsSection = document.getElementById('place-details');
   const reviewsSection = document.getElementById('reviews');
@@ -303,6 +319,7 @@ function setupPlacePage() {
     return;
   }
 
+  // Show add review button only if the user is logged in
   if (token) {
     addReviewSection.innerHTML = `
       <a href="add_review.html?id=${placeId}" class="details-button">Add Review</a>
@@ -311,15 +328,18 @@ function setupPlacePage() {
     addReviewSection.innerHTML = '';
   }
 
+  // Load place details and reviews
   fetchPlaceDetails(token, placeId);
   fetchPlaceReviews(placeId);
 }
 
+// Extract the place ID from the URL query string
 function getPlaceIdFromURL() {
   const params = new URLSearchParams(window.location.search);
   return params.get('id');
 }
 
+// Fetch a single place's details from the backend
 async function fetchPlaceDetails(token, placeId) {
   const headers = {};
 
@@ -349,6 +369,7 @@ async function fetchPlaceDetails(token, placeId) {
   }
 }
 
+// Display one place with its main information, description, and amenities
 function displayPlaceDetails(place) {
   const placeDetailsSection = document.getElementById('place-details');
 
@@ -396,6 +417,7 @@ function displayPlaceDetails(place) {
   `;
 }
 
+// Fetch reviews for the selected place
 async function fetchPlaceReviews(placeId) {
   try {
     const response = await fetch(`/api/v1/places/${placeId}/reviews`, {
@@ -418,6 +440,7 @@ async function fetchPlaceReviews(placeId) {
   }
 }
 
+// Display all reviews for the current place
 function displayPlaceReviews(reviews) {
   const reviewsSection = document.getElementById('reviews');
 
@@ -452,6 +475,7 @@ function displayPlaceReviews(reviews) {
   });
 }
 
+// Initialize the add review page and handle review submission
 function setupAddReviewPage() {
   const reviewForm = document.getElementById('add-review-form');
   const reviewMessage = document.getElementById('review-message');
@@ -475,8 +499,10 @@ function setupAddReviewPage() {
     return;
   }
 
+  // Show the place ID on the page
   placeIdDisplay.textContent = placeId;
 
+  // Submit review form
   reviewForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -498,6 +524,7 @@ function setupAddReviewPage() {
   });
 }
 
+// Ensure the user is logged in before allowing review submission
 function checkReviewAuthentication() {
   const token = getCookie('token');
 
@@ -509,6 +536,7 @@ function checkReviewAuthentication() {
   return token;
 }
 
+// Send a new review to the backend API
 async function submitReview(token, placeId, reviewText, rating) {
   const response = await fetch('/api/v1/reviews/', {
     method: 'POST',
@@ -539,6 +567,7 @@ async function submitReview(token, placeId, reviewText, rating) {
   return response.json();
 }
 
+// Read a cookie value by its name
 function getCookie(name) {
   const cookies = document.cookie.split(';');
 
