@@ -1,126 +1,54 @@
-# 🏠 HBnB Evolution Project
+# HBnB Evolution Project
 
-This project is part of the Holberton School curriculum.  
-It demonstrates the progressive evolution of a layered backend architecture — from UML system design to full business logic implementation.
-
-The project is structured into multiple parts, each building on the previous one.
+A backend project built in four stages, each one adding a new layer of functionality and structure.
 
 ---
 
-# 📘 Part 1: System Design & UML Documentation
+## Part 1 — Simple Explanation
+Part 1 focuses on designing the system before coding.  
+We created diagrams, defined entities, and planned how everything connects.
 
-In Part 1, we focused on designing the complete system architecture before writing any implementation code.
-
-This phase included:
-
-- High-Level Package Diagram
-- Detailed Class Diagram
-- Sequence Diagrams
-- Definition of system entities and relationships
-- Layered architecture planning
-
-### 🎯 Objective
-
-To clearly define:
-
-- Entities (User, Place, Review, Amenity)
-- Relationships between entities
-- Layer responsibilities
-- Data flow between components
-
-This ensured that implementation in the next phase strictly followed a structured architectural plan.
+Documentation:  
+[Part 1 Docs](part1/documentation.md)
 
 ---
 
-# 🚀 Part 2: Business Logic Implementation
+## Part 2 — Simple Explanation
+Part 2 turns the design into working backend logic.  
+We built the models, validations, and the layered architecture.
 
-In Part 2, we transitioned from system design to actual implementation.
-
-This phase focused on building the core domain logic of the HBnB system while respecting the layered architecture defined in Part 1.
-
----
-
-## ✅ What Was Implemented
-
-### Core Models
-- BaseModel (UUID generation + timestamps)
-- User model
-- Place model
-- Review model
-- Amenity model
-
-### Architecture Components
-- Facade pattern to centralize business operations
-- Repository pattern for data persistence
-- Layer separation (API / Business / Persistence)
-
-### Validation Logic
-- Foreign key validation (user_id, place_id)
-- Required field validation
-- Error handling with proper HTTP status codes
+Documentation:  
+[Part 2 Docs](PUT_LINK_HERE)
 
 ---
 
-## 🏗 Applied Architecture
+## Part 3 — Simple Explanation
+Part 3 makes the system secure and persistent.  
+We added login (JWT), permissions, and a real database using SQLAlchemy.
 
-The system strictly follows a layered architecture:
-
-- API Layer → Handles HTTP requests and responses
-- Business Logic Layer → Contains domain rules and models
-- Persistence Layer → Manages data storage via Repository pattern
-
-Each layer has a single responsibility and communicates only with the layer directly below it.
-
-This structure ensures:
-
-- Maintainability
-- Scalability
-- Clear separation of concerns
-- Clean system evolution
+Documentation:  
+[Part 3 Docs](PUT_LINK_HERE)
 
 ---
 
-## 🧪 Testing & Validation
+## Part 4 — Simple Explanation
+Part 4 adds advanced improvements to the API and data handling.  
+It focuses on polishing, extending, and strengthening the backend.
 
-During Part 2:
-
-- All entities were tested via API endpoints
-- CRUD operations were validated
-- Error scenarios were tested:
-  - 400 → Missing or invalid data
-  - 404 → Non-existent resources
-  - 201 → Successful creation
-  - 200 → Successful retrieval
-  - 204 → Successful deletion
-- Swagger was used to verify endpoint registration and behavior
-
-All test results matched the intended system design.
+Documentation:  
+[Part 4 Docs](PUT_LINK_HERE)
 
 ---
 
-# 👩‍💻 Team Contributions
-
-- Mariam — High-Level Package Diagram & Project Structure  
-- Manar — Detailed Class Diagram & User Implementation  
-- Norah — Sequence Diagrams & Entity Integration  
-
----
-
-# 🔮 Next Parts
-
-The next phases of the project will expand into:
-
-- Database integration  
-- Full persistence layer implementation  
-- Advanced API features  
-- Authentication and authorization  
+## Final Summary
+Across all four parts, the project grows step by step:  
+Design → Logic → Authentication → Database → Advanced Features  
+Each stage builds on the previous one to create a clean and scalable backend system.
 
 ---
 
-# 📌 Conclusion
+## Team
+Mariam  
+Manar  
+Norah
 
-HBnB Evolution demonstrates a structured backend development approach:
-
-Design → Architecture → Implementation → Validation  
-
-Each phase builds upon the previous one to ensure a clean, scalable, and maintainable system.
